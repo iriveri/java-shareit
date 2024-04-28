@@ -9,7 +9,7 @@ public interface ItemStorage {
 
     Long addItem(Item item);
 
-    void updateItem(Long itemId, ItemDto itemDto, Long ownerId);
+    void  updateItem(Long itemId, ItemDto itemDto , Long ownerId);
 
     Boolean contains(Long itemId);
 

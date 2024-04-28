@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class BasicItemService implements ItemService {
+public class BasicItemService implements ItemService{
 
     private final ItemStorage itemStorage;
     private final UserService userService;
@@ -37,7 +37,7 @@ public class BasicItemService implements ItemService {
 
     @Override
     public ItemDto editItem(Long itemId, ItemDto itemDto, Long ownerId) {
-        itemStorage.updateItem(itemId, itemDto, ownerId);
+        itemStorage.updateItem(itemId, itemDto ,ownerId);
         return getItem(itemId);
     }
 
