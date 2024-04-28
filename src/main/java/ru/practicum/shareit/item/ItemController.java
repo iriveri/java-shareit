@@ -1,14 +1,22 @@
 package ru.practicum.shareit.item;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.service.ItemService;
 
-/**
- * Контроллер для управления вещами.
- */
 @RestController
 @RequestMapping("/items")
+@Slf4j
 public class ItemController {
+    private final ItemService service;
+    @Autowired
+    public ItemController(ItemService service) {
+        this.service = service;
+    }
 
     /**
      * Добавление новой вещи.
@@ -19,8 +27,10 @@ public class ItemController {
      * Владелец вещи должен быть указан в заголовке запроса.
      */
     @PostMapping
-    public void addItem(@RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") String userId) {
-        // TODO: Implement method
+    public ResponseEntity<ItemDto> addItem(@RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+        var item = service.addItem(itemDto,userId);//
+        log.info("New item is created with ID {}", 1);
+        return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
 
     /**
@@ -31,8 +41,10 @@ public class ItemController {
      * Редактировать вещь может только её владелец.
      */
     @PatchMapping("/{itemId}")
-    public void editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto) {
-        // TODO: Implement method
+    public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto) {
+        var item = service.editItem(itemId,itemDto);
+        log.info("Item data for ID {} has been successfully patched",itemId);
+        return ResponseEntity.status(HttpStatus.OK).body(item);
     }
 
     /**
@@ -42,8 +54,10 @@ public class ItemController {
      * Информацию о вещи может просмотреть любой пользователь.
      */
     @GetMapping("/{itemId}")
-    public void getItem(@PathVariable Long itemId) {
-        // TODO: Implement method
+    public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
+        var item = service.getItem(itemId);
+        log.info("Item data for ID {} has been successfully extracted",item.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(item);
     }
 
     /**
@@ -53,8 +67,10 @@ public class ItemController {
      * Возвращает список всех вещей пользователя с указанием их названия и описания.
      */
     @GetMapping
-    public void getAllItems() {
-        // TODO: Implement method
+    public ResponseEntity<Object> getAllItems() {
+        var items = service.getAllItems();
+        log.info("List consisting of {} item has been successfully fetched",items.size());
+        return ResponseEntity.status(HttpStatus.OK).body(items);
     }
 
     /**
@@ -65,7 +81,9 @@ public class ItemController {
      * Возвращает только доступные для аренды вещи.
      */
     @GetMapping("/search")
-    public void searchItemsByText(@RequestParam String text) {
-        // TODO: Implement method
+    public ResponseEntity<Object> searchItemsByText(@RequestParam String text) {
+        var items = service.searchItemsByText(text);
+        log.info("List consisting of {} item has been successfully fetched",items.size());
+        return ResponseEntity.status(HttpStatus.OK).body(items);
     }
 }

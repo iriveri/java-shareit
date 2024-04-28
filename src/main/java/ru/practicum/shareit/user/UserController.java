@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto newUser) {
         var user = service.addNewUser(newUser);
-        //log.info("New user is created with ID {}", 1);
+        log.info("New user is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
     @PatchMapping("/{userId}")
