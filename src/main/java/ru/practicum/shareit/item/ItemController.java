@@ -15,7 +15,6 @@ import javax.validation.Valid;
 @Slf4j
 public class ItemController {
     private final ItemService service;
-
     @Autowired
     public ItemController(ItemService service) {
         this.service = service;
@@ -31,7 +30,7 @@ public class ItemController {
      */
     @PostMapping
     public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = service.addItem(itemDto, userId);//
+        var item = service.addItem(itemDto,userId);//
         log.info("New item is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
@@ -45,8 +44,8 @@ public class ItemController {
      */
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = service.editItem(itemId, itemDto, userId);
-        log.info("Item data for ID {} has been successfully patched", itemId);
+        var item = service.editItem(itemId,itemDto,userId);
+        log.info("Item data for ID {} has been successfully patched",itemId);
         return ResponseEntity.status(HttpStatus.OK).body(item);
     }
 
@@ -59,7 +58,7 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
         var item = service.getItem(itemId);
-        log.info("Item data for ID {} has been successfully extracted", item.getId());
+        log.info("Item data for ID {} has been successfully extracted",item.getId());
         return ResponseEntity.status(HttpStatus.OK).body(item);
     }
 
@@ -72,7 +71,7 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<Object> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
         var items = service.getAllUserItems(userId);
-        log.info("List consisting of {} item has been successfully fetched", items.size());
+        log.info("List consisting of {} item has been successfully fetched",items.size());
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }
 
@@ -86,7 +85,7 @@ public class ItemController {
     @GetMapping("/search")
     public ResponseEntity<Object> searchItemsByText(@RequestParam String text) {
         var items = service.searchItemsByText(text);
-        log.info("List consisting of {} item has been successfully fetched", items.size());
+        log.info("List consisting of {} item has been successfully fetched",items.size());
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }
 }
