@@ -27,6 +27,9 @@ public class BasicUserService implements UserService {
     }
 
     private void validate(User user) {
+        if(user.getName().isEmpty()){
+            throw new RuntimeException();
+        }
     }
 
     @Override

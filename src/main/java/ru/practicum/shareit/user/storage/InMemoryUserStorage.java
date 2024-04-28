@@ -14,12 +14,19 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
-        checkUserCriteria(user);
         if (users.values().stream().map(User::getEmail).anyMatch(user.getEmail()::equals)) {
             throw new ValidationException("Пользователь с электронной почтой " +
                     user.getEmail() + " уже зарегистрирован.");
         }
         user.setId(++genId);
+        users.put(user.getId(), user);
+        return user;
+    }
+    @Override
+    public User updateUser(User user) {
+        if (!users.containsKey(user.getId())) {
+            throw new IllegalArgumentException("Пользователь с Id: " + user.getId() + " не найден в списке!");
+        }
         users.put(user.getId(), user);
         return user;
     }
@@ -31,21 +38,6 @@ public class InMemoryUserStorage implements UserStorage {
         throw new IllegalArgumentException("Пользователь с Id " + userId + " не найден");
     }
     @Override
-    public User updateUser(User user) {
-        if (!users.containsKey(user.getId())) {
-            throw new IllegalArgumentException("Пользователь с Id: " + user.getId() + " не найден в списке!");
-        }
-        checkUserCriteria(user);
-        users.put(user.getId(), user);
-        return user;
-    }
-
-    @Override
-    public boolean contains(Long userId) {
-        return false;
-    }
-
-    @Override
     public Boolean deleteUser(Long id) {
         if (!users.containsKey(id)) {
             throw new IllegalArgumentException("Такого пользователя не существует!");
@@ -54,10 +46,9 @@ public class InMemoryUserStorage implements UserStorage {
         return true;
     }
 
-
-    private void checkUserCriteria(User user) {
-        if (user.getName().isEmpty()) {
-            throw new RuntimeException("asd");
-        }
+    @Override
+    public boolean contains(Long userId) {
+        return users.containsKey(userId);
     }
+
 }
