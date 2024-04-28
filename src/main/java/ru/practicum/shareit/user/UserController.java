@@ -21,26 +21,26 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto newUser) {
         var user = service.addNewUser(newUser);
-        log.info("New user is created with ID {}", 1);
+        //log.info("New user is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
         var user = service.editUser(userId , userDto);
-        log.info("User data for ID {} has been successfully patched",userId);
+        //log.info("User data for ID {} has been successfully patched",userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         var user = service.getUser(userId);
-        log.info("User data for ID {} has been successfully extracted",userId);
+        //log.info("User data for ID {} has been successfully extracted",userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
     @DeleteMapping("/{userId}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable Long userId) {
-        var user = service.deleteUser(userId);
-        log.info("User with ID {} has been successfully deleted",userId);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long userId) {
+        var isDeleted = service.deleteUser(userId);
+        //log.info("User with ID {} has been successfully deleted",userId);
+        return ResponseEntity.status(HttpStatus.OK).body(isDeleted);
     }
 
 
