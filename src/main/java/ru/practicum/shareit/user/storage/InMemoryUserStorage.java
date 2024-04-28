@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.storage;
 
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.DuplicateException;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -32,7 +33,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void updateUser(Long userId, User user) {
+    public void updateUser(Long userId, UserDto user) {
         if (!contains(userId)) {
             throw new IllegalArgumentException("User with Id: " + userId + " not found in the list!");
         }

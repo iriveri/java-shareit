@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/items")
 @Slf4j
@@ -27,7 +29,7 @@ public class ItemController {
      * Владелец вещи должен быть указан в заголовке запроса.
      */
     @PostMapping
-    public ResponseEntity<ItemDto> addItem(@RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
         var item = service.addItem(itemDto,userId);//
         log.info("New item is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
@@ -41,8 +43,8 @@ public class ItemController {
      * Редактировать вещь может только её владелец.
      */
     @PatchMapping("/{itemId}")
-    public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto) {
-        var item = service.editItem(itemId,itemDto);
+    public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+        var item = service.editItem(itemId,itemDto,userId);
         log.info("Item data for ID {} has been successfully patched",itemId);
         return ResponseEntity.status(HttpStatus.OK).body(item);
     }
@@ -67,8 +69,8 @@ public class ItemController {
      * Возвращает список всех вещей пользователя с указанием их названия и описания.
      */
     @GetMapping
-    public ResponseEntity<Object> getAllItems() {
-        var items = service.getAllItems();
+    public ResponseEntity<Object> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
+        var items = service.getAllUserItems(userId);
         log.info("List consisting of {} item has been successfully fetched",items.size());
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }
