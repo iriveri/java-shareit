@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/users")
 @Slf4j
@@ -19,28 +21,34 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto newUser) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto newUser) {
         var user = service.addNewUser(newUser);
         //log.info("New user is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> editUser(@PathVariable Long userId,@RequestBody UserDto userDto) {
         var user = service.editUser(userId , userDto);
-        //log.info("User data for ID {} has been successfully patched",userId);
+        log.info("User data for ID {} has been successfully patched",userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         var user = service.getUser(userId);
-        //log.info("User data for ID {} has been successfully extracted",userId);
+        log.info("User data for ID {} has been successfully extracted",userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable Long userId) {
-        var isDeleted = service.deleteUser(userId);
-        //log.info("User with ID {} has been successfully deleted",userId);
-        return ResponseEntity.status(HttpStatus.OK).body(isDeleted);
+    public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
+        service.deleteUser(userId);
+        log.info("User data for ID {} has been successfully deleted",userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    @GetMapping
+    public ResponseEntity<Object> getAllUsers() {
+        var users = service.getAllUsers();
+        log.info("List consisting of {} users has been successfully fetched",users.size());
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
 

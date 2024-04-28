@@ -8,6 +8,9 @@ import ru.practicum.shareit.user.dto.UserMapperImpl;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @Service
 public class BasicUserService implements UserService {
     private final UserStorage userStorage;
@@ -23,21 +26,20 @@ public class BasicUserService implements UserService {
     public UserDto addNewUser(UserDto newUser) {
         User user = maper.dtoItemToItem(newUser);
         validate(user);
-        return maper.itemToItemDto(userStorage.addUser(user));
+        long id = userStorage.addUser(user);
+        return getUser(id);
     }
 
     private void validate(User user) {
-        if(user.getName().isEmpty()){
-            throw new RuntimeException();
-        }
     }
 
     @Override
     public UserDto editUser(Long userId, UserDto userDto) {
         User user = maper.dtoItemToItem(userDto);
         validate(user);
-        if (!userStorage.contains(userId)) {
-            return maper.itemToItemDto(userStorage.updateUser(user));
+        if (userStorage.contains(userId)) {
+            userStorage.updateUser(userId, user);
+            return getUser(userId);
         } else {
             throw new RuntimeException("User with this ID doesnt exist");
         }
@@ -53,11 +55,19 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public Boolean deleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         if (userStorage.contains(userId)) {
-            return userStorage.deleteUser(userId);
+            userStorage.deleteUser(userId);
         } else {
             throw new RuntimeException("User with this ID doesnt exist");
         }
+    }
+
+    @Override
+    public Collection<UserDto> getAllUsers() {
+        return userStorage.fetchAllUsers()
+                .stream()
+                .map(maper::itemToItemDto)
+                .collect(Collectors.toList());
     }
 }

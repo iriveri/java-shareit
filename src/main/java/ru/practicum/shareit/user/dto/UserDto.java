@@ -15,5 +15,6 @@ public class UserDto {
     @NotNull(message = "e-mail отсутствует")
     @Email(message = "Введён некоректный e-mail")
     private String email;
+    @NotNull
     private String name;
 }
