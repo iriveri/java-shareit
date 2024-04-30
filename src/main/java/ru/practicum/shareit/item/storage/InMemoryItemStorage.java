@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 @Repository
 public class InMemoryItemStorage implements ItemStorage {
     private static long genId = 0;
@@ -25,7 +26,7 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public void updateItem(Long itemId, ItemDto itemDto , Long ownerId) {
+    public void updateItem(Long itemId, ItemDto itemDto, Long ownerId) {
         if (!contains(itemId)) {
             throw new IllegalArgumentException("Item with Id: " + itemId + " not found in the list!");
         }
@@ -69,7 +70,7 @@ public class InMemoryItemStorage implements ItemStorage {
 
     @Override
     public Collection<Item> searchForItems(String text) {
-        if (text.isEmpty()){
+        if (text.isEmpty()) {
             return Collections.emptyList();
         }
         String refactoredText = text.toLowerCase();
