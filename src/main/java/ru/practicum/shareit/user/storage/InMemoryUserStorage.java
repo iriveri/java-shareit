@@ -28,7 +28,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Collection<User> fetchAllUsers()  {
+    public Collection<User> fetchAllUsers() {
         return users.values();
     }
 
