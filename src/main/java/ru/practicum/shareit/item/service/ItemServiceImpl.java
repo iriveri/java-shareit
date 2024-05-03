@@ -13,32 +13,32 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class BasicItemService implements ItemService {
+public class ItemServiceImpl implements ItemService {
 
     private final ItemStorage itemStorage;
     private final UserService userService;
     private final ItemMapper mapper;
 
     @Autowired
-    public BasicItemService(ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
+    public ItemServiceImpl(ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
         this.itemStorage = itemStorage;
         this.userService = userService;
         this.mapper = mapper;
     }
 
     @Override
-    public ItemDto addItem(ItemDto itemDto, Long ownerId) {
+    public ItemDto create(ItemDto itemDto, Long ownerId) {
         Item item = mapper.dtoItemToItem(itemDto);
         userService.validate(ownerId);
         item.setOwnerId(ownerId);
         long id = itemStorage.addItem(item);
-        return getItem(id);
+        return getItemById(id);
     }
 
     @Override
-    public ItemDto editItem(Long itemId, ItemDto itemDto, Long ownerId) {
+    public ItemDto edit(Long itemId, ItemDto itemDto, Long ownerId) {
         itemStorage.updateItem(itemId, itemDto, ownerId);
-        return getItem(itemId);
+        return getItemById(itemId);
     }
 
     @Override
@@ -49,13 +49,13 @@ public class BasicItemService implements ItemService {
     }
 
     @Override
-    public ItemDto getItem(Long itemId) {
+    public ItemDto getItemById(Long itemId) {
         validate(itemId);
         return mapper.itemToItemDto(itemStorage.fetchItem(itemId));
     }
 
     @Override
-    public Collection<ItemDto> getAllUserItems(Long ownerId) {
+    public Collection<ItemDto> getItemsByOwner(Long ownerId) {
         userService.validate(ownerId);
         return itemStorage.fetchUserItems(ownerId)
                 .stream()

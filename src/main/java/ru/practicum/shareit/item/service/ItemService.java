@@ -6,15 +6,15 @@ import java.util.Collection;
 
 public interface ItemService {
 
-    ItemDto addItem(ItemDto itemDto, Long ownerId);
+    ItemDto create(ItemDto itemDto, Long ownerId);
 
-    ItemDto editItem(Long itemId, ItemDto itemDto, Long ownerId);
+    ItemDto edit(Long itemId, ItemDto itemDto, Long ownerId);
 
     void validate(Long itemId);
 
-    ItemDto getItem(Long itemId);
+    ItemDto getItemById(Long itemId);
 
-    Collection<ItemDto> getAllUserItems(Long ownerId);
+    Collection<ItemDto> getItemsByOwner(Long ownerId);
 
     Collection<ItemDto> searchItemsByText(String text);
 }

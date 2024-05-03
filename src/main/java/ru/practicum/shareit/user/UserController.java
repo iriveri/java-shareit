@@ -14,37 +14,38 @@ import javax.validation.Valid;
 @RequestMapping(path = "/users")
 @Slf4j
 public class UserController {
+
     private final UserService service;
 
-    @Autowired
-    public UserController(UserService service) {
+
+    public UserController(@Autowired UserService service) {
         this.service = service;
     }
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto newUser) {
-        var user = service.addNewUser(newUser);
+        var user = service.create(newUser);
         log.info("New user is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
-        var user = service.editUser(userId, userDto);
+        var user = service.edit(userId, userDto);
         log.info("User data for ID {} has been successfully patched", userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
-        var user = service.getUser(userId);
+        var user = service.getUserById(userId);
         log.info("User data for ID {} has been successfully extracted", userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
-        service.deleteUser(userId);
+        service.delete(userId);
         log.info("User data for ID {} has been successfully deleted", userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

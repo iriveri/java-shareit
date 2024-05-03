@@ -12,21 +12,21 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class BasicUserService implements UserService {
+public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
     private final UserMapper mapper;
 
     @Autowired
-    public BasicUserService(UserStorage userStorage, UserMapper mapper) {
+    public UserServiceImpl(UserStorage userStorage, UserMapper mapper) {
         this.userStorage = userStorage;
         this.mapper = mapper;
     }
 
     @Override
-    public UserDto addNewUser(UserDto newUser) {
+    public UserDto create(UserDto newUser) {
         User user = mapper.dtoUserToUser(newUser);
         long id = userStorage.addUser(user);
-        return getUser(id);
+        return getUserById(id);
     }
 
     @Override
@@ -37,20 +37,20 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public UserDto editUser(Long userId, UserDto userDto) {
+    public UserDto edit(Long userId, UserDto userDto) {
         validate(userId);
         userStorage.updateUser(userId, userDto);
-        return getUser(userId);
+        return getUserById(userId);
     }
 
     @Override
-    public UserDto getUser(Long userId) {
+    public UserDto getUserById(Long userId) {
         validate(userId);
         return mapper.userToUserDto(userStorage.fetchUser(userId));
     }
 
     @Override
-    public void deleteUser(Long userId) {
+    public void delete(Long userId) {
         validate(userId);
         userStorage.deleteUser(userId);
     }

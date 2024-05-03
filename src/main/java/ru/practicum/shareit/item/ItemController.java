@@ -16,8 +16,8 @@ import javax.validation.Valid;
 public class ItemController {
     private final ItemService service;
 
-    @Autowired
-    public ItemController(ItemService service) {
+
+    public ItemController(@Autowired ItemService service) {
         this.service = service;
     }
 
@@ -31,7 +31,7 @@ public class ItemController {
      */
     @PostMapping
     public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = service.addItem(itemDto, userId);//
+        var item = service.create(itemDto, userId);//
         log.info("New item is created with ID {}", 1);
         return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
@@ -45,7 +45,7 @@ public class ItemController {
      */
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = service.editItem(itemId, itemDto, userId);
+        var item = service.edit(itemId, itemDto, userId);
         log.info("Item data for ID {} has been successfully patched", itemId);
         return ResponseEntity.status(HttpStatus.OK).body(item);
     }
@@ -58,7 +58,7 @@ public class ItemController {
      */
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
-        var item = service.getItem(itemId);
+        var item = service.getItemById(itemId);
         log.info("Item data for ID {} has been successfully extracted", item.getId());
         return ResponseEntity.status(HttpStatus.OK).body(item);
     }
@@ -71,7 +71,7 @@ public class ItemController {
      */
     @GetMapping
     public ResponseEntity<Object> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        var items = service.getAllUserItems(userId);
+        var items = service.getItemsByOwner(userId);
         log.info("List consisting of {} item has been successfully fetched", items.size());
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }
