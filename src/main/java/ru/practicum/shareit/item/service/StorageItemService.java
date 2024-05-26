@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -13,14 +14,14 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class ItemServiceImpl implements ItemService {
+public class StorageItemService implements ItemService {
 
     private final ItemStorage itemStorage;
     private final UserService userService;
     private final ItemMapper mapper;
 
     @Autowired
-    public ItemServiceImpl(ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
+    public StorageItemService(@Qualifier("DatabaseItemStorage") ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
         this.itemStorage = itemStorage;
         this.userService = userService;
         this.mapper = mapper;
