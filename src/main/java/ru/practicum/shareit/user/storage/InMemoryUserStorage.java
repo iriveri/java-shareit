@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.storage;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.DuplicateException;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Repository
+@Qualifier("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     private static long genId = 0;
     private final Map<Long, User> users = new HashMap<>();
