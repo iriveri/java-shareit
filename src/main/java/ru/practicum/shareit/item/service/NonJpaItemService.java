@@ -14,14 +14,15 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class StorageItemService implements ItemService {
+@Qualifier("NonJpaItemService")
+public class NonJpaItemService implements ItemService {
 
     private final ItemStorage itemStorage;
     private final UserService userService;
     private final ItemMapper mapper;
 
     @Autowired
-    public StorageItemService(@Qualifier("DatabaseItemStorage") ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
+    public NonJpaItemService(@Qualifier("DatabaseItemStorage") ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
         this.itemStorage = itemStorage;
         this.userService = userService;
         this.mapper = mapper;
