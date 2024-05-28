@@ -2,7 +2,6 @@ package ru.practicum.shareit.user.storage;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.EntityManager;
@@ -37,11 +36,11 @@ public class DatabaseUserStorage implements UserStorage{
 
     @Override
     @Transactional
-    public void updateUser(Long userId, UserDto userDto) {
+    public void updateUser(Long userId, User updatedUser) {
         User user = em.find(User.class, userId);
         if (user != null) {
-            user.setName(userDto.getName());
-            user.setEmail(userDto.getEmail());
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
             em.merge(user);
         }
     }

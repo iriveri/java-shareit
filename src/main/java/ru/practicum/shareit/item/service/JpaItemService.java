@@ -3,10 +3,12 @@ package ru.practicum.shareit.item.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemJpaRepository;
+import ru.practicum.shareit.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.util.Collection;
@@ -17,58 +19,61 @@ import java.util.stream.Collectors;
 public class JpaItemService implements ItemService{
 
     private final ItemJpaRepository itemRepository;
-    private final ItemMapper mapper;
+    private final UserService userService;
 
     @Autowired
-    public JpaItemService(ItemJpaRepository itemRepository, ItemMapper mapper) {
+    public JpaItemService(ItemJpaRepository itemRepository,@Qualifier("JpaUserService") UserService userService) {
         this.itemRepository = itemRepository;
-        this.mapper = mapper;
+        this.userService = userService;
     }
 
     @Override
-    public ItemDto create(ItemDto itemDto, Long ownerId) {
-        Item item = mapper.dtoItemToItem(itemDto);
+    public Item create(Item item, Long ownerId) {
+        userService.validate(ownerId);
         item.setOwnerId(ownerId);
-        item = itemRepository.save(item);
-        return mapper.itemToItemDto(item);
+        return itemRepository.save(item);
     }
 
     @Override
     @Transactional
-    public ItemDto edit(Long itemId, ItemDto itemDto, Long ownerId) {
+    public Item edit(Long itemId, Item item, Long ownerId) {
+        userService.validate(ownerId);
         Item existingItem = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("Item not found"));
         if (!existingItem.getOwnerId().equals(ownerId)) {
             throw new IllegalArgumentException("Not authorized to edit this item");
         }
-        existingItem.setName(itemDto.getName());
-        existingItem.setDescription(itemDto.getDescription());
-        existingItem.setAvailable(itemDto.getAvailable());
-        existingItem = itemRepository.save(existingItem);
-        return mapper.itemToItemDto(existingItem);
+        if (item.getName() != null) {
+            existingItem.setName(item.getName());
+        }
+        if (item.getDescription() != null) {
+            existingItem.setDescription(item.getDescription());
+        }
+        if (item.getAvailable() != null) {
+            existingItem.setAvailable(item.getAvailable());
+        }
+        return existingItem;
     }
 
     @Override
     public void validate(Long itemId) {
         if (!itemRepository.existsById(itemId)) {
-            throw new IllegalArgumentException("Item not found");
+            throw new NotFoundException("Item not found");
         }
     }
 
     @Override
-    public ItemDto getItemById(Long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("Item not found"));
-        return mapper.itemToItemDto(item);
+    public Item getItemById(Long itemId) {
+        return itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item not found"));
     }
 
     @Override
-    public Collection<ItemDto> getItemsByOwner(Long ownerId) {
-        Collection<Item> items = itemRepository.findByOwnerId(ownerId);
-        return items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
+    public Collection<Item> getItemsByOwner(Long ownerId) {
+        userService.validate(ownerId);
+        return itemRepository.findByOwnerId(ownerId);
     }
 
     @Override
-    public Collection<ItemDto> searchItemsByText(String text) {
-        Collection<Item> items = itemRepository.searchForItems(text);
-        return items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
+    public Collection<Item> searchItemsByText(String text) {
+        return itemRepository.searchForItems(text);
     }
 }

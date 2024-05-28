@@ -13,21 +13,18 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-@Qualifier("NonJpaUserServiceImpl")
+@Qualifier("NonJpaUserService")
 public class NonJpaUserService implements UserService {
     private final UserStorage userStorage;
-    private final UserMapper mapper;
 
     @Autowired
-    public NonJpaUserService(@Qualifier("DatabaseUserStorage") UserStorage  userStorage, UserMapper mapper) {
+    public NonJpaUserService(@Qualifier("InMemoryUserStorage") UserStorage  userStorage) {
         this.userStorage = userStorage;
-        this.mapper = mapper;
     }
 
     @Override
-    public UserDto create(UserDto newUser) {
-        User user = mapper.dtoUserToUser(newUser);
-        long id = userStorage.addUser(user);
+    public User create(User newUser) {
+        long id = userStorage.addUser(newUser);
         return getUserById(id);
     }
 
@@ -39,16 +36,16 @@ public class NonJpaUserService implements UserService {
     }
 
     @Override
-    public UserDto edit(Long userId, UserDto userDto) {
+    public User edit(Long userId, User user) {
         validate(userId);
-        userStorage.updateUser(userId, userDto);
+        userStorage.updateUser(userId, user);
         return getUserById(userId);
     }
 
     @Override
-    public UserDto getUserById(Long userId) {
+    public User getUserById(Long userId) {
         validate(userId);
-        return mapper.userToUserDto(userStorage.fetchUser(userId));
+        return userStorage.fetchUser(userId);
     }
 
     @Override
@@ -58,10 +55,7 @@ public class NonJpaUserService implements UserService {
     }
 
     @Override
-    public Collection<UserDto> getAllUsers() {
-        return userStorage.fetchAllUsers()
-                .stream()
-                .map(mapper::userToUserDto)
-                .collect(Collectors.toList());
+    public Collection<User> getAllUsers() {
+        return userStorage.fetchAllUsers();
     }
 }

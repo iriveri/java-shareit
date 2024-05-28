@@ -35,17 +35,17 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void updateUser(Long userId, UserDto user) {
+    public void updateUser(Long userId, User updatedUser) {
         if (!contains(userId)) {
             throw new IllegalArgumentException("User with Id: " + userId + " not found in the list!");
         }
-        String email = user.getEmail();
+        String email = updatedUser.getEmail();
         if (email != null && users.values().stream().anyMatch(existingUser -> existingUser.getEmail().equals(email) && !Objects.equals(existingUser.getId(), userId))) {
             throw new DuplicateException("User with email " + email + " is already registered.");
         }
         User oldUser = users.get(userId);
-        if (user.getName() != null) {
-            oldUser.setName(user.getName());
+        if (updatedUser.getName() != null) {
+            oldUser.setName(updatedUser.getName());
         }
         if (email != null) {
             oldUser.setEmail(email);

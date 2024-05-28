@@ -19,18 +19,16 @@ public class NonJpaItemService implements ItemService {
 
     private final ItemStorage itemStorage;
     private final UserService userService;
-    private final ItemMapper mapper;
 
     @Autowired
-    public NonJpaItemService(@Qualifier("DatabaseItemStorage") ItemStorage itemStorage, UserService userService, ItemMapper mapper) {
+    public NonJpaItemService(@Qualifier("InMemoryItemStorage") ItemStorage itemStorage,@Qualifier("NonJpaUserService") UserService userService) {
         this.itemStorage = itemStorage;
         this.userService = userService;
-        this.mapper = mapper;
+
     }
 
     @Override
-    public ItemDto create(ItemDto itemDto, Long ownerId) {
-        Item item = mapper.dtoItemToItem(itemDto);
+    public Item create(Item item, Long ownerId) {
         userService.validate(ownerId);
         item.setOwnerId(ownerId);
         long id = itemStorage.addItem(item);
@@ -38,8 +36,8 @@ public class NonJpaItemService implements ItemService {
     }
 
     @Override
-    public ItemDto edit(Long itemId, ItemDto itemDto, Long ownerId) {
-        itemStorage.updateItem(itemId, itemDto, ownerId);
+    public Item edit(Long itemId, Item item, Long ownerId) {
+        itemStorage.updateItem(itemId, item, ownerId);
         return getItemById(itemId);
     }
 
@@ -51,25 +49,19 @@ public class NonJpaItemService implements ItemService {
     }
 
     @Override
-    public ItemDto getItemById(Long itemId) {
+    public Item getItemById(Long itemId) {
         validate(itemId);
-        return mapper.itemToItemDto(itemStorage.fetchItem(itemId));
+        return itemStorage.fetchItem(itemId);
     }
 
     @Override
-    public Collection<ItemDto> getItemsByOwner(Long ownerId) {
+    public Collection<Item> getItemsByOwner(Long ownerId) {
         userService.validate(ownerId);
-        return itemStorage.fetchUserItems(ownerId)
-                .stream()
-                .map(mapper::itemToItemDto)
-                .collect(Collectors.toList());
+        return itemStorage.fetchUserItems(ownerId);
     }
 
     @Override
-    public Collection<ItemDto> searchItemsByText(String text) {
-        return itemStorage.searchForItems(text)
-                .stream()
-                .map(mapper::itemToItemDto)
-                .collect(Collectors.toList());
+    public Collection<Item> searchItemsByText(String text) {
+        return itemStorage.searchForItems(text);
     }
 }

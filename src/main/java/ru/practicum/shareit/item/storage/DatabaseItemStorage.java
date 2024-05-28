@@ -26,12 +26,12 @@ public class DatabaseItemStorage implements ItemStorage {
 
     @Override
     @Transactional
-    public void updateItem(Long itemId, ItemDto itemDto, Long ownerId) {
+    public void updateItem(Long itemId, Item updatedItem, Long ownerId) {
         Item item = em.find(Item.class, itemId);
         if (item != null && item.getOwnerId().equals(ownerId)) {
-            item.setName(itemDto.getName());
-            item.setDescription(itemDto.getDescription());
-            item.setAvailable(itemDto.getAvailable());
+            item.setName(updatedItem.getName());
+            item.setDescription(updatedItem.getDescription());
+            item.setAvailable(updatedItem.getAvailable());
             em.merge(item);
         }
     }

@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/items")
@@ -17,9 +19,11 @@ import javax.validation.Valid;
 public class ItemController {
     private final ItemService service;
 
-
-    public ItemController(@Autowired @Qualifier("NonJpaItemService") ItemService service) {
+    private final ItemMapper mapper;
+    @Autowired
+    public ItemController( @Qualifier("JpaItemService") ItemService service, ItemMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     /**
@@ -32,9 +36,11 @@ public class ItemController {
      */
     @PostMapping
     public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = service.create(itemDto, userId);//
+        var item = mapper.dtoItemToItem(itemDto);
+        item = service.create(item, userId);//
         log.info("New item is created with ID {}", 1);
-        return ResponseEntity.status(HttpStatus.CREATED).body(item);
+        var itemToTransfer = mapper.itemToItemDto(item);
+        return ResponseEntity.status(HttpStatus.CREATED).body(itemToTransfer);
     }
 
     /**
@@ -46,9 +52,11 @@ public class ItemController {
      */
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = service.edit(itemId, itemDto, userId);
+        var item = mapper.dtoItemToItem(itemDto);
+        item = service.edit(itemId, item, userId);
         log.info("Item data for ID {} has been successfully patched", itemId);
-        return ResponseEntity.status(HttpStatus.OK).body(item);
+        var itemToTransfer = mapper.itemToItemDto(item);
+        return ResponseEntity.status(HttpStatus.OK).body(itemToTransfer);
     }
 
     /**
@@ -61,7 +69,8 @@ public class ItemController {
     public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
         var item = service.getItemById(itemId);
         log.info("Item data for ID {} has been successfully extracted", item.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(item);
+        var itemToTransfer = mapper.itemToItemDto(item);
+        return ResponseEntity.status(HttpStatus.OK).body(itemToTransfer);
     }
 
     /**
@@ -74,7 +83,8 @@ public class ItemController {
     public ResponseEntity<Object> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
         var items = service.getItemsByOwner(userId);
         log.info("List consisting of {} item has been successfully fetched", items.size());
-        return ResponseEntity.status(HttpStatus.OK).body(items);
+        var itemsToTransfer = items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
     }
 
     /**
@@ -88,6 +98,7 @@ public class ItemController {
     public ResponseEntity<Object> searchItemsByText(@RequestParam String text) {
         var items = service.searchItemsByText(text);
         log.info("List consisting of {} item has been successfully fetched", items.size());
-        return ResponseEntity.status(HttpStatus.OK).body(items);
+        var itemsToTransfer = items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
     }
 }
