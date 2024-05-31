@@ -29,8 +29,8 @@ public class JpaUserService implements UserService {
     @Override
     @Transactional
     public User edit(Long userId, User newInfo) {
-
-        User existingUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
         if (newInfo.getName() != null) {
             existingUser.setName(newInfo.getName());
         }
@@ -38,12 +38,12 @@ public class JpaUserService implements UserService {
             existingUser.setEmail(newInfo.getEmail());
         }
         return existingUser;
-
     }
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override

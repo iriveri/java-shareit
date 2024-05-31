@@ -1,10 +1,8 @@
 package ru.practicum.shareit.item.service;
 
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemExtensionType;
 
 import java.util.Collection;
 
@@ -17,7 +15,7 @@ public interface ItemService {
     void validate(Long itemId);
 
     Item getItemById(Long itemId);
-    ExtendedItem getAdditionalItemInfo(Item item, ItemExtensionType type);
+    ExtendedItem getAdditionalItemInfo(Item item, Long userId);
 
     Collection<Item> getItemsByOwner(Long ownerId);
 

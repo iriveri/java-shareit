@@ -28,6 +28,12 @@ public class BookingController {
         this.mapper = mapper;
     }
 
+    /**
+     * Создание нового бронирования.
+     * Endpoint: POST /bookings
+     * Принимает объект BookingRequestDto в теле запроса.
+     * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, создающего бронирование.
+     */
     @PostMapping
     public ResponseEntity<BookingResponseDto> createBooking(@Valid @RequestBody BookingRequestDto bookingDto, @RequestHeader("X-Sharer-User-Id") Long bookerId) {
         var booking = mapper.toBooking(bookingDto);
@@ -37,6 +43,11 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingToTransfer);
     }
 
+    /**
+     * Обновление статуса бронирования.
+     * Endpoint: PATCH /bookings/{bookingId}
+     * Позволяет владельцу вещи подтвердить или отклонить бронирование.
+     */
     @PatchMapping("/{bookingId}")
     public ResponseEntity<BookingResponseDto> updateBookingStatus(@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable Long bookingId, @RequestParam boolean approved) {
         var booking = service.updateBookingStatus(ownerId, bookingId, approved);
@@ -45,6 +56,11 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);
     }
 
+    /**
+     * Получение информации о конкретном бронировании.
+     * Endpoint: GET /bookings/{bookingId}
+     * Информацию о бронировании может получить владелец вещи или арендатор.
+     */
     @GetMapping("/{bookingId}")
     public ResponseEntity<BookingResponseDto> getBooking(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId) {
         var booking = service.getBooking(userId, bookingId);
@@ -53,19 +69,29 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);
     }
 
+    /**
+     * Получение списка бронирований пользователя.
+     * Endpoint: GET /bookings
+     * Возвращает список бронирований пользователя в зависимости от их статуса.
+     */
     @GetMapping
-    public ResponseEntity<Object> getUserBookings(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(defaultValue = "ALL") String state) {
+    public ResponseEntity<List<BookingResponseDto>> getUserBookings(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(defaultValue = "ALL") String state) {
         var bookings = service.getUserBookings(userId, state);
-        log.info("Booking for user with ID {} has been successfully fetched", userId);
-        var bookingToTransfer =bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);
+        log.info("Bookings for user with ID {} have been successfully fetched", userId);
+        var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(bookingsToTransfer);
     }
 
+    /**
+     * Получение списка бронирований владельца.
+     * Endpoint: GET /bookings/owner
+     * Возвращает список бронирований для вещей, принадлежащих владельцу.
+     */
     @GetMapping("/owner")
-    public ResponseEntity<Object> getOwnerBookings(@RequestHeader("X-Sharer-User-Id") Long ownerId, @RequestParam(defaultValue = "ALL") String state) {
+    public ResponseEntity<List<BookingResponseDto>> getOwnerBookings(@RequestHeader("X-Sharer-User-Id") Long ownerId, @RequestParam(defaultValue = "ALL") String state) {
         var bookings = service.getOwnerBookings(ownerId, state);
-        log.info("Booking for user with ID {} has been successfully fetched", ownerId);
-        var bookingToTransfer =bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);
+        log.info("Bookings for owner with ID {} have been successfully fetched", ownerId);
+        var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(bookingsToTransfer);
     }
 }

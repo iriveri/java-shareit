@@ -14,28 +14,38 @@ import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping("/users")
 @Slf4j
 public class UserController {
 
     private final UserService service;
-
     private final UserMapper mapper;
+
     @Autowired
     public UserController(@Qualifier("JpaUserService") UserService service, UserMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
 
+    /**
+     * Создание нового пользователя.
+     * Endpoint: POST /users
+     * Принимает объект UserDto в теле запроса.
+     */
     @PostMapping
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto newUser) {
         var user = mapper.dtoUserToUser(newUser);
         user = service.create(user);
-        log.info("New user is created with ID {}", 1);
+        log.info("New user is created with ID {}", user.getId());
         var userToTransfer = mapper.userToUserDto(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userToTransfer);
     }
 
+    /**
+     * Редактирование пользователя.
+     * Endpoint: PATCH /users/{userId}
+     * Позволяет изменить информацию о пользователе.
+     */
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
         var user = mapper.dtoUserToUser(userDto);
@@ -45,6 +55,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userToTransfer);
     }
 
+    /**
+     * Просмотр информации о конкретном пользователе.
+     * Endpoint: GET /users/{userId}
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
         var user = service.getUserById(userId);
@@ -53,13 +67,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userToTransfer);
     }
 
+    /**
+     * Удаление пользователя.
+     * Endpoint: DELETE /users/{userId}
+     */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         service.delete(userId);
         log.info("User data for ID {} has been successfully deleted", userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    /**
+     * Просмотр списка всех пользователей.
+     * Endpoint: GET /users
+     */
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {
         var users = service.getAllUsers();
@@ -67,6 +89,4 @@ public class UserController {
         var usersToTransfer = users.stream().map(mapper::userToUserDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(usersToTransfer);
     }
-
-
 }

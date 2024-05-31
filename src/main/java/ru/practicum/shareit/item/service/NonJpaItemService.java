@@ -7,7 +7,6 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemExtensionType;
 import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -55,7 +54,7 @@ public class NonJpaItemService implements ItemService {
     }
 
     @Override
-    public ExtendedItem getAdditionalItemInfo(Item item, ItemExtensionType type) {
+    public ExtendedItem getAdditionalItemInfo(Item item, Long type) {
         return null;
     }
 
