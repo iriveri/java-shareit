@@ -84,7 +84,7 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalArgumentException("Cannot book unavailable item");
         }
         if (booking.getItem().getOwnerId().equals(userId)) {
-            throw new IllegalArgumentException("Cannot book own item");
+            throw new NotFoundException("Cannot book own item");
         }
     }
 
@@ -98,7 +98,7 @@ public class BookingServiceImpl implements BookingService {
             throw new NotFoundException("User is not the owner of the item");
         }
         if (booking.getStatus() == BookingStatus.APPROVED || booking.getStatus() == BookingStatus.REJECTED) {
-            throw new NotFoundException("Booking status already decided");
+            throw new IllegalArgumentException("Booking status already decided");
         }
     }
 
