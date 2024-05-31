@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.ItemExtensionType;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -104,5 +105,9 @@ public class ItemController {
         log.info("List consisting of {} item has been successfully fetched", items.size());
         var itemsToTransfer = items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
+    }
+    @PostMapping("/{itemId}/comment")
+    public Comment addComment(@PathVariable Long itemId, @RequestBody Comment comment, @RequestHeader("X-User-Id") Long userId) {
+        return service.addComment(itemId, userId, comment);
     }
 }
