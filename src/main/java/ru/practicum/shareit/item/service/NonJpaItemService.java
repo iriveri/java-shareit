@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemExtensionType;
 import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 @Qualifier("NonJpaItemService")
@@ -55,6 +55,11 @@ public class NonJpaItemService implements ItemService {
     }
 
     @Override
+    public ExtendedItem getAdditionalItemInfo(Item item, ItemExtensionType type) {
+        return null;
+    }
+
+    @Override
     public Collection<Item> getItemsByOwner(Long ownerId) {
         userService.validate(ownerId);
         return itemStorage.fetchUserItems(ownerId);
@@ -63,5 +68,10 @@ public class NonJpaItemService implements ItemService {
     @Override
     public Collection<Item> searchItemsByText(String text) {
         return itemStorage.searchForItems(text);
+    }
+
+    @Override
+    public Comment addComment(Long itemId, Long userId, Comment comment) {
+        return null;
     }
 }

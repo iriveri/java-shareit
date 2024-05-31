@@ -38,10 +38,10 @@ public class ItemController {
      */
     @PostMapping
     public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = mapper.dtoItemToItem(itemDto);
+        var item = mapper.toItem(itemDto);
         item = service.create(item, userId);//
         log.info("New item is created with ID {}", 1);
-        var itemToTransfer = mapper.itemToItemDto(item);
+        var itemToTransfer = mapper.toItemDto(item);
         return ResponseEntity.status(HttpStatus.CREATED).body(itemToTransfer);
     }
 
@@ -54,10 +54,10 @@ public class ItemController {
      */
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        var item = mapper.dtoItemToItem(itemDto);
+        var item = mapper.toItem(itemDto);
         item = service.edit(itemId, item, userId);
         log.info("Item data for ID {} has been successfully patched", itemId);
-        var itemToTransfer = mapper.itemToItemDto(item);
+        var itemToTransfer = mapper.toItemDto(item);
         return ResponseEntity.status(HttpStatus.OK).body(itemToTransfer);
     }
 
@@ -71,7 +71,7 @@ public class ItemController {
     public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
         var item = service.getItemById(itemId);
         log.info("Item data for ID {} has been successfully extracted", item.getId());
-        var itemToTransfer = mapper.itemToItemDto(item);
+        var itemToTransfer = mapper.toItemDto(item);
         return ResponseEntity.status(HttpStatus.OK).body(itemToTransfer);
     }
 
@@ -88,7 +88,7 @@ public class ItemController {
                 .map(item -> service.getAdditionalItemInfo(item, ItemExtensionType.BOOKING_TIME))
                 .collect(Collectors.toList());
         log.info("List consisting of {} item has been successfully fetched", items.size());
-        var itemsToTransfer = items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
+        var itemsToTransfer = items.stream().map(mapper::toItemDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
     }
 
@@ -103,7 +103,7 @@ public class ItemController {
     public ResponseEntity<Object> searchItemsByText(@RequestParam String text) {
         var items = service.searchItemsByText(text);
         log.info("List consisting of {} item has been successfully fetched", items.size());
-        var itemsToTransfer = items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
+        var itemsToTransfer = items.stream().map(mapper::toItemDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
     }
     @PostMapping("/{itemId}/comment")
