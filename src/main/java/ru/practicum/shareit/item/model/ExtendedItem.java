@@ -12,6 +12,7 @@ public class ExtendedItem extends Item {
     private Booking lastBooking;
     private Booking nextBooking;
     private Collection<Comment> comments;
+
     public ExtendedItem(Item item) {
         super(item);
     }

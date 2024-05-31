@@ -15,6 +15,7 @@ public interface ItemService {
     void validate(Long itemId);
 
     Item getItemById(Long itemId);
+
     ExtendedItem getAdditionalItemInfo(Item item, Long userId);
 
     Collection<Item> getItemsByOwner(Long ownerId);

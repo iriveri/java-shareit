@@ -20,7 +20,7 @@ public class NonJpaItemService implements ItemService {
     private final UserService userService;
 
     @Autowired
-    public NonJpaItemService(@Qualifier("InMemoryItemStorage") ItemStorage itemStorage,@Qualifier("NonJpaUserService") UserService userService) {
+    public NonJpaItemService(@Qualifier("InMemoryItemStorage") ItemStorage itemStorage, @Qualifier("NonJpaUserService") UserService userService) {
         this.itemStorage = itemStorage;
         this.userService = userService;
 

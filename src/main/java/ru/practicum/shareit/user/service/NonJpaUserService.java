@@ -4,13 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 @Qualifier("NonJpaUserService")
@@ -18,7 +15,7 @@ public class NonJpaUserService implements UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public NonJpaUserService(@Qualifier("InMemoryUserStorage") UserStorage  userStorage) {
+    public NonJpaUserService(@Qualifier("InMemoryUserStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 

@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Repository
 @Qualifier("DatabaseUserStorage")
-public class DatabaseUserStorage implements UserStorage{
+public class DatabaseUserStorage implements UserStorage {
     @PersistenceContext
     private EntityManager em;
 

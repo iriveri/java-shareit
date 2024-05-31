@@ -11,6 +11,7 @@ public interface ItemMapper {
     ItemDto toItemDto(Item item);
 
     Item toItem(ItemDto itemDto);
+
     @Mapping(source = "lastBooking", target = "lastBooking")
     @Mapping(source = "nextBooking", target = "nextBooking")
     @Mapping(source = "comments", target = "comments")
