@@ -1,14 +1,18 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 /**
  * TODO Sprint add-controllers.
  */
-@Data
+
 @Entity
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "\"item\"")
 public class Item {
     @Id
@@ -19,4 +23,12 @@ public class Item {
     String name;
     String description;
     Boolean available;
+
+    public Item(Item item) {
+        this.id = item.getId();
+        this.ownerId = item.getOwnerId();
+        this.name = item.getName();
+        this.description = item.getDescription();
+        this.available = item.getAvailable();
+    }
 }

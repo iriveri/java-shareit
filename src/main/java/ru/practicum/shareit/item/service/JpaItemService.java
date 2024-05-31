@@ -3,28 +3,34 @@ package ru.practicum.shareit.item.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemExtensionType;
 import ru.practicum.shareit.item.storage.ItemJpaRepository;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.Optional;
 
 @Service
 @Qualifier("JpaItemService")
-public class JpaItemService implements ItemService{
+public class JpaItemService implements ItemService {
 
     private final ItemJpaRepository itemRepository;
     private final UserService userService;
+    private final BookingService bookingService;
 
     @Autowired
-    public JpaItemService(ItemJpaRepository itemRepository,@Qualifier("JpaUserService") UserService userService) {
+    public JpaItemService(ItemJpaRepository itemRepository, @Qualifier("JpaUserService") UserService userService, BookingService bookingService) {
         this.itemRepository = itemRepository;
         this.userService = userService;
+        this.bookingService = bookingService;
     }
 
     @Override
@@ -64,6 +70,32 @@ public class JpaItemService implements ItemService{
     @Override
     public Item getItemById(Long itemId) {
         return itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item not found"));
+    }
+
+    public ExtendedItem getAdditionalItemInfo(Item item, ItemExtensionType type) {
+        var extendedItem = new ExtendedItem(item);
+        switch (type) {
+            case BOOKING_TIME:
+                var bookings = bookingService.getItemBookings(item.getId(), "APPROVED");
+
+                // Находим последнее исполненное/исполняемое бронирование
+                Optional<Booking> lastBooking = bookings.stream()
+                        .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
+                        .max(Comparator.comparing(Booking::getStart));
+
+                // Находим следующее не исполненное бронирование
+                Optional<Booking> nextBooking = bookings.stream()
+                        .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
+                        .min(Comparator.comparing(Booking::getStart));
+
+                lastBooking.ifPresent(extendedItem::setLastBooking);
+                nextBooking.ifPresent(extendedItem::setNextBooking);
+
+                break;
+            default:
+                throw new RuntimeException("This ItemExtensionType not yet implemented");
+        }
+        return extendedItem;
     }
 
     @Override

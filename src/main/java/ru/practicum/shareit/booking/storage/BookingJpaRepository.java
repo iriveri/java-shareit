@@ -13,10 +13,12 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByItemOwnerIdOrderByStartDesc(Long ownerId);
 
+    List<Booking> findByItemIdOrderByStartDesc(Long ownerId);
+
     List<Booking> findByBookerIdAndStatusOrderByStartDesc(Long bookerId, BookingStatus status);
 
     List<Booking> findByItemOwnerIdAndStatusOrderByStartDesc(Long ownerId, BookingStatus status);
-
+    List<Booking> findByItemIdAndStatusOrderByStartDesc(Long ownerId, BookingStatus status);
 
     @Query("SELECT b FROM Booking b WHERE b.item.id = :itemId AND " +
             "(b.start < :end AND b.end > :start)")

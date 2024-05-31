@@ -93,10 +93,10 @@ public class BookingServiceImpl implements BookingService {
                         .collect(Collectors.toList());
                 break;
             case "WAITING":
-                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, BookingStatus.WAITING);
-                break;
             case "REJECTED":
-                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, BookingStatus.REJECTED);
+            case "APPROVED":
+            case "CANCELED":
+                bookings = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId, BookingStatus.valueOf(state.toUpperCase()));
                 break;
             case "ALL":
                 bookings = bookingRepository.findByBookerIdOrderByStartDesc(userId);
@@ -128,13 +128,46 @@ public class BookingServiceImpl implements BookingService {
                         .collect(Collectors.toList());
                 break;
             case "WAITING":
-                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(ownerId, BookingStatus.WAITING);
-                break;
             case "REJECTED":
-                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(ownerId, BookingStatus.REJECTED);
+            case "APPROVED":
+            case "CANCELED":
+                bookings = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(ownerId, BookingStatus.valueOf(state.toUpperCase()));
                 break;
             case "ALL":
                 bookings = bookingRepository.findByItemOwnerIdOrderByStartDesc(ownerId);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown state: UNSUPPORTED_STATUS");
+        }
+        return bookings;
+    }
+    public List<Booking> getItemBookings(Long itemId, String state) {
+        itemService.validate(itemId);
+        List<Booking> bookings;
+        switch (state.toUpperCase()) {
+            case "CURRENT":
+                bookings = bookingRepository.findByItemIdOrderByStartDesc(itemId).stream()
+                        .filter(b -> b.getStart().isBefore(LocalDateTime.now()) && b.getEnd().isAfter(LocalDateTime.now()))
+                        .collect(Collectors.toList());
+                break;
+            case "PAST":
+                bookings = bookingRepository.findByItemIdOrderByStartDesc(itemId).stream()
+                        .filter(b -> b.getEnd().isBefore(LocalDateTime.now()))
+                        .collect(Collectors.toList());
+                break;
+            case "FUTURE":
+                bookings = bookingRepository.findByItemIdOrderByStartDesc(itemId).stream()
+                        .filter(b -> b.getStart().isAfter(LocalDateTime.now()))
+                        .collect(Collectors.toList());
+                break;
+            case "WAITING":
+            case "REJECTED":
+            case "APPROVED":
+            case "CANCELED":
+                bookings = bookingRepository.findByItemIdAndStatusOrderByStartDesc(itemId, BookingStatus.valueOf(state.toUpperCase()));
+                break;
+            case "ALL":
+                bookings = bookingRepository.findByItemIdOrderByStartDesc(itemId);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown state: UNSUPPORTED_STATUS");

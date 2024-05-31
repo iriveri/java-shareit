@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.model.ItemExtensionType;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -82,6 +83,9 @@ public class ItemController {
     @GetMapping
     public ResponseEntity<Object> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
         var items = service.getItemsByOwner(userId);
+        var itemsWithBooking = items.stream()
+                .map(item -> service.getAdditionalItemInfo(item, ItemExtensionType.BOOKING_TIME))
+                .collect(Collectors.toList());
         log.info("List consisting of {} item has been successfully fetched", items.size());
         var itemsToTransfer = items.stream().map(mapper::itemToItemDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
