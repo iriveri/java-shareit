@@ -12,6 +12,8 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,7 @@ public class ItemRequestController {
         this.requestService = requestService;
         this.requestMapper = requestMapper;
     }
+
     /**
      * Создание нового запроса на вещь
      * Endpoint: POST /requests
@@ -35,7 +38,10 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, создающего запрос.
      */
     @PostMapping
-    public ResponseEntity<ItemRequestDto> createRequest(@Valid @RequestBody ItemRequestDto requestDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<ItemRequestDto> createRequest(
+            @Valid @RequestBody ItemRequestDto requestDto,
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         ItemRequest itemRequest = requestMapper.toItemRequest(requestDto);
         itemRequest = requestService.createRequest(userId, itemRequest);
         log.info("Request for user with ID {} has been successfully created", userId);
@@ -51,7 +57,9 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего список.
      */
     @GetMapping
-    public ResponseEntity<List<ItemRequestDataDto>> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<List<ItemRequestDataDto>> getUserRequests(
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         List<ItemRequest> requests = requestService.getUserRequests(userId);
         log.info("Requests for user with ID {} have been successfully fetched", userId);
         List<ItemRequestDataDto> requestDtos = requests.stream().map(requestMapper::toItemRequestDataDto).collect(Collectors.toList());
@@ -67,10 +75,17 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего список.
      */
     @GetMapping("/all")
-    public ResponseEntity<List<ItemRequestDto>> getAllRequests(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(defaultValue = "0") int from, @RequestParam(defaultValue = "10") int size) {
-        List<ItemRequest> requests = requestService.getAllRequests(userId, from, size);
+    public ResponseEntity<List<ItemRequestDto>> getAllRequests(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
+            @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) int limit
+    ) {
+        List<ItemRequest> requests = requestService.getAllRequests(userId, offset, limit);
         log.info("All requests for user with ID {} have been successfully fetched", userId);
-        List<ItemRequestDto> requestDtos = requests.stream().map(requestMapper::toItemRequestDto).collect(Collectors.toList());
+        List<ItemRequestDto> requestDtos = requests
+                .stream()
+                .map(requestMapper::toItemRequestDto)
+                .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(requestDtos);
     }
 
@@ -81,7 +96,10 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего данные.
      */
     @GetMapping("/{requestId}")
-    public ResponseEntity<ItemRequestDataDto> getRequestById(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long requestId) {
+    public ResponseEntity<ItemRequestDataDto> getRequestById(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @PathVariable Long requestId
+    ) {
         ItemRequest request = requestService.getRequestById(userId, requestId);
         log.info("Request with ID {} for user with ID {} has been successfully fetched", requestId, userId);
         ItemRequestDataDto requestDto = requestMapper.toItemRequestDataDto(request);
