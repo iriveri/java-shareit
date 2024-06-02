@@ -23,8 +23,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Qualifier("JpaItemService")
-public class JpaItemService implements ItemService {
+@Qualifier("ItemServiceImpl")
+public class ItemServiceImpl implements ItemService {
 
     private final ItemJpaRepository itemRepository;
     private final CommentJpaRepository commentRepository;
@@ -32,8 +32,8 @@ public class JpaItemService implements ItemService {
     private final BookingService bookingService;
 
     @Autowired
-    public JpaItemService(ItemJpaRepository itemRepository, CommentJpaRepository commentRepository,
-                          @Qualifier("JpaUserService") UserService userService, @Lazy BookingService bookingService) {
+    public ItemServiceImpl(ItemJpaRepository itemRepository, CommentJpaRepository commentRepository,
+                           UserService userService, @Lazy BookingService bookingService) {
         this.itemRepository = itemRepository;
         this.commentRepository = commentRepository;
         this.userService = userService;

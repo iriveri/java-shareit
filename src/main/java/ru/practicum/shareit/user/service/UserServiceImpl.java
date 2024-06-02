@@ -11,13 +11,13 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Service
-@Qualifier("JpaUserService")
-public class JpaUserService implements UserService {
+@Qualifier("UserServiceImpl")
+public class UserServiceImpl implements UserService {
 
     private final UserJpaRepository userRepository;
 
     @Autowired
-    public JpaUserService(UserJpaRepository userRepository) {
+    public UserServiceImpl(UserJpaRepository userRepository) {
         this.userRepository = userRepository;
     }
 

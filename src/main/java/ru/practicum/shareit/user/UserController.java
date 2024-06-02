@@ -22,7 +22,7 @@ public class UserController {
     private final UserMapper mapper;
 
     @Autowired
-    public UserController(@Qualifier("JpaUserService") UserService service, UserMapper mapper) {
+    public UserController(@Qualifier("UserServiceImpl") UserService service, UserMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }

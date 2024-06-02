@@ -8,8 +8,8 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.storage.BookingJpaRepository;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.service.JpaItemService;
-import ru.practicum.shareit.user.service.JpaUserService;
+import ru.practicum.shareit.item.service.ItemServiceImpl;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingJpaRepository bookingRepository;
-    private final JpaItemService itemService;
-    private final JpaUserService userService;
+    private final ItemServiceImpl itemService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public BookingServiceImpl(BookingJpaRepository bookingRepository, JpaItemService itemService,
-                              @Lazy JpaUserService userService) {
+    public BookingServiceImpl(BookingJpaRepository bookingRepository, ItemServiceImpl itemService,
+                              @Lazy UserServiceImpl userService) {
         this.bookingRepository = bookingRepository;
         this.itemService = itemService;
         this.userService = userService;

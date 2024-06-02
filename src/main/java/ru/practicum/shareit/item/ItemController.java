@@ -24,7 +24,7 @@ public class ItemController {
     private final ItemMapper itemMapper;
 
     @Autowired
-    public ItemController(@Qualifier("JpaItemService") ItemService service, CommentMapper commentMapper, ItemMapper itemMapper) {
+    public ItemController(@Qualifier("ItemServiceImpl") ItemService service, CommentMapper commentMapper, ItemMapper itemMapper) {
         this.service = service;
         this.commentMapper = commentMapper;
         this.itemMapper = itemMapper;
