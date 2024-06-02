@@ -38,7 +38,10 @@ public class ItemController {
      * Владелец вещи должен быть указан в заголовке запроса.
      */
     @PostMapping
-    public ResponseEntity<ItemDto> addItem(@Valid @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<ItemDto> addItem(
+            @Valid @RequestBody ItemDto itemDto,
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         var item = itemMapper.toItem(itemDto);
         item = service.create(item, userId);
         log.info("New item is created with ID {}", item.getId());
@@ -53,7 +56,11 @@ public class ItemController {
      * Редактировать вещь может только её владелец.
      */
     @PatchMapping("/{itemId}")
-    public ResponseEntity<ItemDto> editItem(@PathVariable Long itemId, @RequestBody ItemDto itemDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<ItemDto> editItem(
+            @PathVariable Long itemId,
+            @RequestBody ItemDto itemDto,
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         var item = itemMapper.toItem(itemDto);
         item = service.edit(itemId, item, userId);
         log.info("Item data for ID {} has been successfully patched", itemId);
@@ -67,7 +74,10 @@ public class ItemController {
      * Информацию о вещи может просмотреть любой пользователь.
      */
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<ItemDto> getItem(
+            @PathVariable Long itemId,
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         var item = service.getItemById(itemId);
         var itemWithBooking = service.getAdditionalItemInfo(item, userId);
         log.info("Item data for ID {} has been successfully extracted", item.getId());
@@ -81,7 +91,9 @@ public class ItemController {
      * Возвращает список всех вещей пользователя с указанием их названия и описания.
      */
     @GetMapping
-    public ResponseEntity<Object> getAllItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<Object> getAllItems(
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         var items = service.getItemsByOwner(userId);
         var itemsWithBooking = items.stream()
                 .map(item -> service.getAdditionalItemInfo(item, userId))
@@ -98,7 +110,9 @@ public class ItemController {
      * Возвращает только доступные для аренды вещи.
      */
     @GetMapping("/search")
-    public ResponseEntity<Object> searchItemsByText(@RequestParam String text) {
+    public ResponseEntity<Object> searchItemsByText(
+            @RequestParam String text
+    ) {
         var items = service.searchItemsByText(text);
         log.info("List consisting of {} items has been successfully fetched", items.size());
         var itemsToTransfer = items.stream().map(itemMapper::toItemDto).collect(Collectors.toList());
@@ -112,7 +126,11 @@ public class ItemController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, добавляющего комментарий.
      */
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<CommentDto> addComment(@PathVariable Long itemId, @Valid @RequestBody CommentDto commentDto, @RequestHeader("X-Sharer-User-Id") Long userId) {
+    public ResponseEntity<CommentDto> addComment(
+            @PathVariable Long itemId,
+            @Valid @RequestBody CommentDto commentDto,
+            @RequestHeader("X-Sharer-User-Id") Long userId
+    ) {
         var comment = commentMapper.toComment(commentDto);
         comment = service.addComment(itemId, userId, comment);
         log.info("Comment has been successfully added to item with ID {}", itemId);
