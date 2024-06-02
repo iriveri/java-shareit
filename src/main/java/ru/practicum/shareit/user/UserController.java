@@ -33,7 +33,9 @@ public class UserController {
      * Принимает объект UserDto в теле запроса.
      */
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto newUser) {
+    public ResponseEntity<UserDto> createUser(
+            @Valid @RequestBody UserDto newUser
+    ) {
         var user = mapper.dtoUserToUser(newUser);
         user = service.create(user);
         log.info("New user is created with ID {}", user.getId());
@@ -47,7 +49,10 @@ public class UserController {
      * Позволяет изменить информацию о пользователе.
      */
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserDto> editUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> editUser(
+            @PathVariable Long userId,
+            @RequestBody UserDto userDto
+    ) {
         var user = mapper.dtoUserToUser(userDto);
         user = service.edit(userId, user);
         log.info("User data for ID {} has been successfully patched", userId);
@@ -60,7 +65,9 @@ public class UserController {
      * Endpoint: GET /users/{userId}
      */
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
+    public ResponseEntity<UserDto> getUser(
+            @PathVariable Long userId
+    ) {
         var user = service.getUserById(userId);
         log.info("User data for ID {} has been successfully extracted", userId);
         var userToTransfer = mapper.userToUserDto(user);
@@ -72,7 +79,9 @@ public class UserController {
      * Endpoint: DELETE /users/{userId}
      */
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUser(
+            @PathVariable Long userId
+    ) {
         service.delete(userId);
         log.info("User data for ID {} has been successfully deleted", userId);
         return ResponseEntity.status(HttpStatus.OK).build();

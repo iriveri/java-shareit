@@ -35,7 +35,10 @@ public class BookingController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, создающего бронирование.
      */
     @PostMapping
-    public ResponseEntity<BookingResponseDto> createBooking(@Valid @RequestBody BookingRequestDto bookingDto, @RequestHeader("X-Sharer-User-Id") Long bookerId) {
+    public ResponseEntity<BookingResponseDto> createBooking(
+            @Valid @RequestBody BookingRequestDto bookingDto,
+            @RequestHeader("X-Sharer-User-Id") Long bookerId
+    ) {
         var booking = mapper.toBooking(bookingDto);
         booking = service.createBooking(bookerId, booking);
         log.info("Booking for user with ID {} has been successfully created", bookerId);
@@ -49,7 +52,11 @@ public class BookingController {
      * Позволяет владельцу вещи подтвердить или отклонить бронирование.
      */
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<BookingResponseDto> updateBookingStatus(@RequestHeader("X-Sharer-User-Id") Long ownerId, @PathVariable Long bookingId, @RequestParam boolean approved) {
+    public ResponseEntity<BookingResponseDto> updateBookingStatus(
+            @RequestHeader("X-Sharer-User-Id") Long ownerId,
+            @PathVariable Long bookingId,
+            @RequestParam boolean approved
+    ) {
         var booking = service.updateBookingStatus(ownerId, bookingId, approved);
         log.info("Booking status for user with ID {} has been successfully updated", ownerId);
         var bookingToTransfer = mapper.toBookingResponseDto(booking);
@@ -62,7 +69,10 @@ public class BookingController {
      * Информацию о бронировании может получить владелец вещи или арендатор.
      */
     @GetMapping("/{bookingId}")
-    public ResponseEntity<BookingResponseDto> getBooking(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId) {
+    public ResponseEntity<BookingResponseDto> getBooking(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @PathVariable Long bookingId
+    ) {
         var booking = service.getBooking(userId, bookingId);
         log.info("Booking for user with ID {} has been successfully fetched", userId);
         var bookingToTransfer = mapper.toBookingResponseDto(booking);
@@ -75,7 +85,10 @@ public class BookingController {
      * Возвращает список бронирований пользователя в зависимости от их статуса.
      */
     @GetMapping
-    public ResponseEntity<List<BookingResponseDto>> getUserBookings(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestParam(defaultValue = "ALL") String state) {
+    public ResponseEntity<List<BookingResponseDto>> getUserBookings(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(defaultValue = "ALL") String state
+    ) {
         var bookings = service.getUserBookings(userId, state);
         log.info("Bookings for user with ID {} have been successfully fetched", userId);
         var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
@@ -88,7 +101,10 @@ public class BookingController {
      * Возвращает список бронирований для вещей, принадлежащих владельцу.
      */
     @GetMapping("/owner")
-    public ResponseEntity<List<BookingResponseDto>> getOwnerBookings(@RequestHeader("X-Sharer-User-Id") Long ownerId, @RequestParam(defaultValue = "ALL") String state) {
+    public ResponseEntity<List<BookingResponseDto>> getOwnerBookings(
+            @RequestHeader("X-Sharer-User-Id") Long ownerId,
+            @RequestParam(defaultValue = "ALL") String state
+    ) {
         var bookings = service.getOwnerBookings(ownerId, state);
         log.info("Bookings for owner with ID {} have been successfully fetched", ownerId);
         var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
