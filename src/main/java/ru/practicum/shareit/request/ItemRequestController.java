@@ -78,7 +78,7 @@ public class ItemRequestController {
     public ResponseEntity<List<ItemRequestDto>> getAllRequests(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
-            @RequestParam(value = "size", defaultValue = "20") @Min(1) @Max(100) int limit
+            @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
         List<ItemRequest> requests = requestService.getAllRequests(userId, offset, limit);
         log.info("All requests for user with ID {} have been successfully fetched", userId);

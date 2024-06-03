@@ -13,6 +13,8 @@ import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.stream.Collectors;
 
 @RestController
@@ -92,7 +94,9 @@ public class ItemController {
      */
     @GetMapping
     public ResponseEntity<Object> getAllItems(
-            @RequestHeader("X-Sharer-User-Id") Long userId
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
+            @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
         var items = service.getItemsByOwner(userId);
         var itemsWithBooking = items.stream()
@@ -111,7 +115,9 @@ public class ItemController {
      */
     @GetMapping("/search")
     public ResponseEntity<Object> searchItemsByText(
-            @RequestParam String text
+            @RequestParam String text,
+            @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
+            @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
         var items = service.searchItemsByText(text);
         log.info("List consisting of {} items has been successfully fetched", items.size());

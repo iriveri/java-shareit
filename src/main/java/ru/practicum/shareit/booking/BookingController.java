@@ -11,6 +11,8 @@ import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,9 +89,11 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingResponseDto>> getUserBookings(
             @RequestHeader("X-Sharer-User-Id") Long userId,
-            @RequestParam(defaultValue = "ALL") String state
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
+            @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
-        var bookings = service.getUserBookings(userId, state);
+        var bookings = service.getUserBookings(userId, state, offset, limit);
         log.info("Bookings for user with ID {} have been successfully fetched", userId);
         var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(bookingsToTransfer);
@@ -103,9 +107,11 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<List<BookingResponseDto>> getOwnerBookings(
             @RequestHeader("X-Sharer-User-Id") Long ownerId,
-            @RequestParam(defaultValue = "ALL") String state
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
+            @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
-        var bookings = service.getOwnerBookings(ownerId, state);
+        var bookings = service.getOwnerBookings(ownerId, state, offset, limit);
         log.info("Bookings for owner with ID {} have been successfully fetched", ownerId);
         var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(bookingsToTransfer);
