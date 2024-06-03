@@ -67,13 +67,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getUserBookings(Long userId, String state) {
+    public List<Booking> getUserBookings(Long userId, String state, int offset, int limit) {
         userService.validate(userId);
         return filterBookingsByState(bookingRepository.findByBookerIdOrderByStartDesc(userId), state);
     }
 
     @Override
-    public List<Booking> getOwnerBookings(Long ownerId, String state) {
+    public List<Booking> getOwnerBookings(Long ownerId, String state, int offset, int limit) {
         userService.validate(ownerId);
         return filterBookingsByState(bookingRepository.findByItemOwnerIdOrderByStartDesc(ownerId), state);
     }
