@@ -18,9 +18,9 @@ public interface ItemService {
 
     ExtendedItem getAdditionalItemInfo(Item item, Long userId);
 
-    Collection<Item> getItemsByOwner(Long ownerId);
+    Collection<Item> getItemsByOwner(Long ownerId, int offset, int limit);
 
-    Collection<Item> searchItemsByText(String text);
+    Collection<Item> searchItemsByText(String text, int offset, int limit);
 
     Comment addComment(Long itemId, Long userId, Comment comment);
 }

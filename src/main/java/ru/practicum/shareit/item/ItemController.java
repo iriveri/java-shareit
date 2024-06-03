@@ -98,7 +98,7 @@ public class ItemController {
             @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
-        var items = service.getItemsByOwner(userId);
+        var items = service.getItemsByOwner(userId, offset, limit);
         var itemsWithBooking = items.stream()
                 .map(item -> service.getAdditionalItemInfo(item, userId))
                 .collect(Collectors.toList());
@@ -119,7 +119,7 @@ public class ItemController {
             @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
-        var items = service.searchItemsByText(text);
+        var items = service.searchItemsByText(text, offset, limit);
         log.info("List consisting of {} items has been successfully fetched", items.size());
         var itemsToTransfer = items.stream().map(itemMapper::toItemDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);

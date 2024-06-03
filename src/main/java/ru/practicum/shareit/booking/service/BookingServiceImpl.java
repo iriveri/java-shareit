@@ -72,7 +72,7 @@ public class BookingServiceImpl implements BookingService {
         userService.validate(userId);
         PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
         Specification<Booking> spec = createSpecification(state);
-        return bookingRepository.findByBookerId(spec, pageRequest).getContent();
+        return bookingRepository.findByBookerId(userId, spec, pageRequest).getContent();
     }
 
     @Override
@@ -80,17 +80,23 @@ public class BookingServiceImpl implements BookingService {
         userService.validate(ownerId);
         PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
         Specification<Booking> spec = createSpecification(state);
-        return bookingRepository.findByItemOwnerId(spec, pageRequest).getContent();
+        return bookingRepository.findByItemOwnerId(ownerId, spec, pageRequest).getContent();
     }
 
     @Override
-    public List<Booking> getItemBookings(Long itemId, String state) {
-        int offset = 0;
-        int limit = 10;
+    public List<Booking> getItemBookings(Long itemId, String state, int offset, int limit) {
         itemService.validate(itemId);
         PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
         Specification<Booking> spec = createSpecification(state);
-        return bookingRepository.findByItemId(spec, pageRequest).getContent();
+        return bookingRepository.findByItemId(itemId, spec, pageRequest).getContent();
+    }
+
+    @Override
+    public boolean isUserBookedItem(Long userId, Long itemId) {
+        Specification<Booking> isApproved = BookingSpecification.hasState("APPROVED");
+        Specification<Booking> isPast = BookingSpecification.isPast();
+
+        return bookingRepository.existsByBookerIdAndItemId(userId, itemId, isApproved.and(isPast));
     }
 
     private void validateUserAndItem(Long userId, Booking booking) {
