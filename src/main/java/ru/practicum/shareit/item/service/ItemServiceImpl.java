@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Comment;
@@ -19,9 +18,6 @@ import ru.practicum.shareit.user.service.UserService;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Qualifier("ItemServiceImpl")
@@ -91,21 +87,12 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ExtendedItem getAdditionalItemInfo(Item item, Long userId) {
         ExtendedItem extendedItem = new ExtendedItem(item);
-        var bookings = bookingService.getItemBookings(item.getId(), "APPROVED", 0, 10)
-                .stream()
-                .filter(booking -> booking.getItem().getOwnerId().equals(userId))
-                .collect(Collectors.toList());
 
-        Optional<Booking> lastBooking = bookings.stream()
-                .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
-                .max(Comparator.comparing(Booking::getStart));
+        bookingService.getLastBooking(item.getId(),userId)
+                .ifPresent(extendedItem::setLastBooking);
+        bookingService.getNextBooking(item.getId(),userId)
+                .ifPresent(extendedItem::setNextBooking);
 
-        Optional<Booking> nextBooking = bookings.stream()
-                .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
-                .min(Comparator.comparing(Booking::getStart));
-
-        lastBooking.ifPresent(extendedItem::setLastBooking);
-        nextBooking.ifPresent(extendedItem::setNextBooking);
         extendedItem.setComments(commentRepository.findByItemId(item.getId()));
 
         return extendedItem;

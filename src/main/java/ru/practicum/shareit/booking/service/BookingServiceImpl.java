@@ -15,7 +15,9 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -56,6 +58,7 @@ public class BookingServiceImpl implements BookingService {
         return booking;
     }
 
+
     @Override
     public Booking getBooking(Long userId, Long bookingId) {
         userService.validate(userId);
@@ -70,32 +73,44 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getUserBookings(Long userId, String state, int offset, int limit) {
         userService.validate(userId);
         PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
-        Specification<Booking> spec = createSpecification(state);
-        return bookingRepository.findByBookerId(userId, spec, pageRequest).getContent();
+        Specification<Booking> byBookerId = BookingSpecification.byBookerId(userId);
+        Specification<Booking> bySortingSpec = createSpecification(state);
+        return bookingRepository.findAll(byBookerId.and(bySortingSpec), pageRequest).getContent();
     }
 
     @Override
     public List<Booking> getOwnerBookings(Long ownerId, String state, int offset, int limit) {
         userService.validate(ownerId);
         PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
-        Specification<Booking> spec = createSpecification(state);
-        return bookingRepository.findByItemOwnerId(ownerId, spec, pageRequest).getContent();
+        Specification<Booking> byOwnerId = BookingSpecification.byOwnerId(ownerId);
+        Specification<Booking> bySortingSpec = createSpecification(state);
+        return bookingRepository.findAll(byOwnerId.and(bySortingSpec), pageRequest).getContent();
     }
 
     @Override
     public List<Booking> getItemBookings(Long itemId, String state, int offset, int limit) {
         itemService.validate(itemId);
         PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
-        Specification<Booking> spec = createSpecification(state);
-        return bookingRepository.findByItemId(itemId, spec, pageRequest).getContent();
+        Specification<Booking> byItemId = BookingSpecification.byItemId(itemId);
+        Specification<Booking> bySortingSpec = createSpecification(state);
+        return bookingRepository.findAll(byItemId.and(bySortingSpec), pageRequest).getContent();
     }
 
     @Override
     public boolean isUserBookedItem(Long userId, Long itemId) {
-        Specification<Booking> isApproved = BookingSpecification.hasState("APPROVED");
-        Specification<Booking> isPast = BookingSpecification.isPast();
+        return bookingRepository.isUserBookedItem(userId, itemId, LocalDateTime.now());
+    }
 
-        return bookingRepository.existsByBookerIdAndItemId(userId, itemId, isApproved.and(isPast));
+    @Override
+    @Transactional(readOnly=true)
+    public Optional<Booking> getLastBooking(Long itemId, Long userId) {
+        return bookingRepository.getLastBooking(itemId, userId,LocalDateTime.now());
+    }
+
+    @Override
+    @Transactional(readOnly=true)
+    public Optional<Booking> getNextBooking(Long itemId, Long userId) {
+        return bookingRepository.getNextBooking(itemId, userId,LocalDateTime.now());
     }
 
     private void validateUserAndItem(Long userId, Booking booking) {
