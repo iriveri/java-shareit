@@ -135,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void validateUserHasRentedItem(Item item, User user) {
-        var bookingList = bookingService.getUserBookings(user.getId(), "APPROVED")
+        var bookingList = bookingService.getUserBookings(user.getId(), "CURRENT",0,1)
                 .stream()
                 .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()) && booking.getItem().getId().equals(item.getId()))
                 .collect(Collectors.toList());
