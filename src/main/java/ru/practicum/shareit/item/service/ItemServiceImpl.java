@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
@@ -90,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ExtendedItem getAdditionalItemInfo(Item item, Long userId) {
         ExtendedItem extendedItem = new ExtendedItem(item);
-        var bookings = bookingService.getItemBookings(item.getId(), "APPROVED")
+        var bookings = bookingService.getItemBookings(item.getId(), "APPROVED", 0, 10)
                 .stream()
                 .filter(booking -> booking.getItem().getOwnerId().equals(userId))
                 .collect(Collectors.toList());
@@ -111,14 +112,16 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Collection<Item> getItemsByOwner(Long ownerId) {
+    public Collection<Item> getItemsByOwner(Long ownerId, int offset, int limit) {
         userService.validate(ownerId);
-        return itemRepository.findByOwnerId(ownerId);
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit);
+        return itemRepository.findByOwnerId(ownerId, pageRequest).getContent();
     }
 
     @Override
-    public Collection<Item> searchItemsByText(String text) {
-        return itemRepository.searchForItems(text);
+    public Collection<Item> searchItemsByText(String text, int offset, int limit) {
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit);
+        return itemRepository.searchForItems(text, pageRequest).getContent();
     }
 
     @Override
@@ -136,12 +139,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void validateUserHasRentedItem(Item item, User user) {
-        var bookingList = bookingService.getUserBookings(user.getId(), "CURRENT",0,1)
-                .stream()
-                .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()) && booking.getItem().getId().equals(item.getId()))
-                .collect(Collectors.toList());
-
-        if (bookingList.isEmpty()) {
+        if (!bookingService.isUserBookedItem(user.getId(), item.getId())) {
             throw new IllegalArgumentException("User has not rented this item");
         }
     }

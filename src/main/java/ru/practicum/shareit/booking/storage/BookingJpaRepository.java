@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
-    Slice<Booking> findByBookerId(Specification<Booking> spec, Pageable pageable);
+    Slice<Booking> findByBookerId(Long bookerId,Specification<Booking> spec, Pageable pageable);
 
-    Slice<Booking> findByItemOwnerId(Specification<Booking> spec, Pageable pageable);
+    Slice<Booking> findByItemOwnerId(Long ownerId,Specification<Booking> spec, Pageable pageable);
 
-    Slice<Booking> findByItemId(Specification<Booking> spec, Pageable pageable);
+    Slice<Booking> findByItemId(Long itemId,Specification<Booking> spec, Pageable pageable);
+
+    boolean existsByBookerIdAndItemId(Long bookerId, Long itemId, Specification<Booking> spec);
 
     @Query("SELECT b FROM Booking b WHERE b.item.id = :itemId AND " +
             "(b.start < :end AND b.end > :start)")
