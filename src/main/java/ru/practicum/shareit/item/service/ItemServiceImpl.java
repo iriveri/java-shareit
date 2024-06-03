@@ -41,6 +41,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Item create(Item item, Long ownerId) {
         userService.validate(ownerId);
         item.setOwnerId(ownerId);

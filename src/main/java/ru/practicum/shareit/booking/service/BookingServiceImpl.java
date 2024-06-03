@@ -43,18 +43,26 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking updateBookingStatus(Long ownerId, Long bookingId, boolean approved) {
         userService.validate(ownerId);
-        Booking booking = getBookingById(bookingId);
-        validateOwnerAndBookingStatus(ownerId, booking);
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Booking not found"));
+        if (!booking.getItem().getOwnerId().equals(ownerId)) {
+            throw new NotFoundException("User is not the owner of the item");
+        }
+        if (booking.getStatus() == BookingStatus.APPROVED || booking.getStatus() == BookingStatus.REJECTED) {
+            throw new IllegalArgumentException("Booking status already decided");
+        }
         booking.setStatus(approved ? BookingStatus.APPROVED : BookingStatus.REJECTED);
         return booking;
     }
 
-    @Transactional
     @Override
     public Booking getBooking(Long userId, Long bookingId) {
         userService.validate(userId);
-        Booking booking = getBookingById(bookingId);
-        validateUserAccessToBooking(userId, booking);
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Booking not found"));
+        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
+            throw new NotFoundException("User is not authorized to view this booking");
+        }
         return booking;
     }
 
@@ -85,26 +93,6 @@ public class BookingServiceImpl implements BookingService {
         }
         if (booking.getItem().getOwnerId().equals(userId)) {
             throw new NotFoundException("Cannot book own item");
-        }
-    }
-
-    private Booking getBookingById(Long bookingId) {
-        return bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException("Booking not found"));
-    }
-
-    private void validateOwnerAndBookingStatus(Long ownerId, Booking booking) {
-        if (!booking.getItem().getOwnerId().equals(ownerId)) {
-            throw new NotFoundException("User is not the owner of the item");
-        }
-        if (booking.getStatus() == BookingStatus.APPROVED || booking.getStatus() == BookingStatus.REJECTED) {
-            throw new IllegalArgumentException("Booking status already decided");
-        }
-    }
-
-    private void validateUserAccessToBooking(Long userId, Booking booking) {
-        if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
-            throw new NotFoundException("User is not authorized to view this booking");
         }
     }
 
