@@ -4,6 +4,7 @@ package ru.practicum.shareit.booking.service;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingService {
     Booking createBooking(Long userId, Booking bookingDto);
@@ -19,4 +20,7 @@ public interface BookingService {
     List<Booking> getItemBookings(Long ownerId, String state, int offset, int limit);
     boolean isUserBookedItem(Long userId, Long itemId);
 
+    Optional<Booking> getLastBooking(Long itemId, Long userId);
+
+    Optional<Booking> getNextBooking(Long itemId, Long userId);
 }

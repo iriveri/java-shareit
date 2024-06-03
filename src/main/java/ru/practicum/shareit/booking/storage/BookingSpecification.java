@@ -45,4 +45,17 @@ public class BookingSpecification {
             return criteriaBuilder.greaterThan(root.get("start"), now);
         };
     }
+    public static Specification<Booking> byOwnerId(Long ownerId) {
+        return (Root<Booking> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("item").get("ownerId"), ownerId);
+    }
+    public static Specification<Booking> byBookerId(Long bookerId) {
+        return (Root<Booking> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("booker").get("id"), bookerId);
+    }
+
+    public static Specification<Booking> byItemId(Long itemId) {
+        return (Root<Booking> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("item").get("id"), itemId);
+    }
 }
