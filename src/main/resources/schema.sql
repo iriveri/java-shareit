@@ -49,6 +49,6 @@ CREATE TABLE IF NOT EXISTS item_request
     description  TEXT,
     requester_id BIGINT,
     created      TIMESTAMP,
-    CONSTRAINT pk_booking PRIMARY KEY (id),
-    CONSTRAINT fk_booker FOREIGN KEY (requester_id) REFERENCES users (id)
+    CONSTRAINT pk_item_request PRIMARY KEY (id),
+    CONSTRAINT fk_requester FOREIGN KEY (requester_id) REFERENCES users (id)
 );

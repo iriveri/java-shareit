@@ -2,18 +2,20 @@ package ru.practicum.shareit.booking.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.storage.BookingJpaRepository;
+import ru.practicum.shareit.booking.storage.BookingSpecification;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -43,8 +45,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking updateBookingStatus(Long ownerId, Long bookingId, boolean approved) {
         userService.validate(ownerId);
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException("Booking not found"));
+        Booking booking = getBookingById(bookingId);
         if (!booking.getItem().getOwnerId().equals(ownerId)) {
             throw new NotFoundException("User is not the owner of the item");
         }
@@ -58,8 +59,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Booking getBooking(Long userId, Long bookingId) {
         userService.validate(userId);
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException("Booking not found"));
+        Booking booking = getBookingById(bookingId);
         if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
             throw new NotFoundException("User is not authorized to view this booking");
         }
@@ -69,19 +69,27 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getUserBookings(Long userId, String state, int offset, int limit) {
         userService.validate(userId);
-        return filterBookingsByState(bookingRepository.findByBookerIdOrderByStartDesc(userId), state);
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
+        Specification<Booking> spec = createSpecification(state);
+        return bookingRepository.findByBookerId(spec, pageRequest).getContent();
     }
 
     @Override
     public List<Booking> getOwnerBookings(Long ownerId, String state, int offset, int limit) {
         userService.validate(ownerId);
-        return filterBookingsByState(bookingRepository.findByItemOwnerIdOrderByStartDesc(ownerId), state);
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
+        Specification<Booking> spec = createSpecification(state);
+        return bookingRepository.findByItemOwnerId(spec, pageRequest).getContent();
     }
 
     @Override
     public List<Booking> getItemBookings(Long itemId, String state) {
+        int offset = 0;
+        int limit = 10;
         itemService.validate(itemId);
-        return filterBookingsByState(bookingRepository.findByItemIdOrderByStartDesc(itemId), state);
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by(Sort.Direction.DESC, "start"));
+        Specification<Booking> spec = createSpecification(state);
+        return bookingRepository.findByItemId(spec, pageRequest).getContent();
     }
 
     private void validateUserAndItem(Long userId, Booking booking) {
@@ -96,31 +104,27 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private List<Booking> filterBookingsByState(List<Booking> bookings, String state) {
-        LocalDateTime now = LocalDateTime.now();
+    private Booking getBookingById(Long bookingId) {
+        return bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Booking not found"));
+    }
+
+
+    private Specification<Booking> createSpecification(String state) {
         switch (state.toUpperCase()) {
             case "CURRENT":
-                return bookings.stream()
-                        .filter(b -> b.getStart().isBefore(now) && b.getEnd().isAfter(now))
-                        .collect(Collectors.toList());
+                return BookingSpecification.isCurrent();
             case "PAST":
-                return bookings.stream()
-                        .filter(b -> b.getEnd().isBefore(now))
-                        .collect(Collectors.toList());
+                return BookingSpecification.isPast();
             case "FUTURE":
-                return bookings.stream()
-                        .filter(b -> b.getStart().isAfter(now))
-                        .collect(Collectors.toList());
+                return BookingSpecification.isFuture();
             case "WAITING":
             case "REJECTED":
             case "APPROVED":
             case "CANCELED":
-                BookingStatus status = BookingStatus.valueOf(state.toUpperCase());
-                return bookings.stream()
-                        .filter(b -> b.getStatus() == status)
-                        .collect(Collectors.toList());
+                return BookingSpecification.hasState(state);
             case "ALL":
-                return bookings;
+                return (root, query, cb) -> cb.conjunction();
             default:
                 throw new IllegalArgumentException("Unknown state: " + state);
         }
