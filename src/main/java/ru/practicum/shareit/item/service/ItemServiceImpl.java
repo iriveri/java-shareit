@@ -12,6 +12,7 @@ import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.CommentJpaRepository;
 import ru.practicum.shareit.item.storage.ItemJpaRepository;
+import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -27,14 +28,16 @@ public class ItemServiceImpl implements ItemService {
     private final CommentJpaRepository commentRepository;
     private final UserService userService;
     private final BookingService bookingService;
+    private final ItemRequestService itemRequestService;
 
     @Autowired
     public ItemServiceImpl(ItemJpaRepository itemRepository, CommentJpaRepository commentRepository,
-                           UserService userService, @Lazy BookingService bookingService) {
+                           UserService userService, @Lazy BookingService bookingService, ItemRequestService itemRequestService) {
         this.itemRepository = itemRepository;
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.bookingService = bookingService;
+        this.itemRequestService = itemRequestService;
     }
 
     @Override
@@ -42,7 +45,11 @@ public class ItemServiceImpl implements ItemService {
     public Item create(Item item, Long ownerId) {
         userService.validate(ownerId);
         item.setOwnerId(ownerId);
-        return itemRepository.save(item);
+        item = itemRepository.save(item);
+        if(item.getRequestId()!= null){
+            itemRequestService.createResponse(item,item.getRequestId());
+        }
+        return item;
     }
 
     @Override
