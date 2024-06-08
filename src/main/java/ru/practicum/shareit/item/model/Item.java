@@ -21,6 +21,8 @@ public class Item {
     String name;
     String description;
     Boolean available;
+    @Transient
+    Long requestId;
 
     public Item(Item item) {
         this.id = item.getId();

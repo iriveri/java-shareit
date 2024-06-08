@@ -18,7 +18,7 @@ public class ItemRequest {
     private Long id;
 
     @Column(name = "description", nullable = false)
-    private String text;
+    private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", nullable = false)
@@ -27,5 +27,11 @@ public class ItemRequest {
     @Column(nullable = false)
     private LocalDateTime created;
 
-    // Getters and setters
+    public ItemRequest(ItemRequest itemRequest) {
+        this.id = itemRequest.getId();
+        this.description = itemRequest.getDescription();
+        this.requester = itemRequest.getRequester();
+        this.created = itemRequest.getCreated();
+    }
+
 }

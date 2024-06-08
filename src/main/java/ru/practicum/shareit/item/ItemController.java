@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentMapper;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/items")
 @Slf4j
+@Validated
 public class ItemController {
     private final ItemService service;
     private final CommentMapper commentMapper;
@@ -89,8 +91,9 @@ public class ItemController {
 
     /**
      * Просмотр списка всех вещей пользователя.
-     * Endpoint: GET /items
+     * Endpoint: GET /items?from={from}&size{size}
      * Возвращает список всех вещей пользователя с указанием их названия и описания.
+     * В запросе присутствует пагинация: from - индекс первого элемента, size - количество элементов для отображения
      */
     @GetMapping
     public ResponseEntity<Object> getAllItems(
@@ -109,9 +112,10 @@ public class ItemController {
 
     /**
      * Поиск вещей по тексту.
-     * Endpoint: GET /items/search?text={text}
+     * Endpoint: GET /items/search?text={text}from={from}&size{size}
      * Пользователь передает в строке запроса текст, по которому осуществляется поиск вещей.
      * Возвращает только доступные для аренды вещи.
+     * В запросе присутствует пагинация: from - индекс первого элемента, size - количество элементов для отображения
      */
     @GetMapping("/search")
     public ResponseEntity<Object> searchItemsByText(

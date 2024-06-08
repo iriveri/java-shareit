@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemRequestDataDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/requests")
 @Slf4j
+@Validated
 public class ItemRequestController {
 
     private final ItemRequestService requestService;
@@ -62,7 +64,11 @@ public class ItemRequestController {
     ) {
         List<ItemRequest> requests = requestService.getUserRequests(userId);
         log.info("Requests for user with ID {} have been successfully fetched", userId);
-        List<ItemRequestDataDto> requestDtos = requests.stream().map(requestMapper::toItemRequestDataDto).collect(Collectors.toList());
+        List<ItemRequestDataDto> requestDtos = requests
+                .stream()
+                .map(requestService::getAdditionalItemInfo)
+                .map(requestMapper::toItemRequestDataDto)
+                .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(requestDtos);
     }
 
@@ -75,16 +81,17 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего список.
      */
     @GetMapping("/all")
-    public ResponseEntity<List<ItemRequestDto>> getAllRequests(
+    public ResponseEntity<List<ItemRequestDataDto>> getAllRequests(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
         List<ItemRequest> requests = requestService.getAllRequests(userId, offset, limit);
         log.info("All requests for user with ID {} have been successfully fetched", userId);
-        List<ItemRequestDto> requestDtos = requests
+        List<ItemRequestDataDto> requestDtos = requests
                 .stream()
-                .map(requestMapper::toItemRequestDto)
+                .map(requestService::getAdditionalItemInfo)
+                .map(requestMapper::toItemRequestDataDto)
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(requestDtos);
     }
@@ -102,7 +109,8 @@ public class ItemRequestController {
     ) {
         ItemRequest request = requestService.getRequestById(userId, requestId);
         log.info("Request with ID {} for user with ID {} has been successfully fetched", requestId, userId);
-        ItemRequestDataDto requestDto = requestMapper.toItemRequestDataDto(request);
+        var asa = requestService.getAdditionalItemInfo(request);
+        ItemRequestDataDto requestDto = requestMapper.toItemRequestDataDto(asa);
         return ResponseEntity.status(HttpStatus.OK).body(requestDto);
     }
 }
