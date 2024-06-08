@@ -7,7 +7,7 @@ import ru.practicum.shareit.request.model.ExtendedItemRequest;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 
-@Mapper(uses = {ItemMapper.class})
+@Mapper(uses = {ItemMapper.class,ItemResponseMapper.class})
 public interface ItemRequestMapper {
     @Mapping(source = "description", target = "description")
     ItemRequest toItemRequest(ItemRequestDto itemRequestDto);
