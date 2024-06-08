@@ -84,14 +84,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItemById(Long itemId) {
+    public Item getById(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Item not found"));
     }
 
     @Override
     @Transactional
-    public ExtendedItem getAdditionalItemInfo(Item item, Long userId) {
+    public ExtendedItem getExtendedItem(Item item, Long userId) {
         ExtendedItem extendedItem = new ExtendedItem(item);
 
         bookingService.getLastBooking(item.getId(), userId)
@@ -120,8 +120,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public Comment addComment(Long itemId, Long userId, Comment comment) {
-        var item = getItemById(itemId);
-        var user = userService.getUserById(userId);
+        var item = getById(itemId);
+        var user = userService.getById(userId);
         validateUserHasRentedItem(item, user);
 
         comment.setItem(item);

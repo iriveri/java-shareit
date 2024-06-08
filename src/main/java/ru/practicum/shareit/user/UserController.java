@@ -68,7 +68,7 @@ public class UserController {
     public ResponseEntity<UserDto> getUser(
             @PathVariable Long userId
     ) {
-        var user = service.getUserById(userId);
+        var user = service.getById(userId);
         log.info("User data for ID {} has been successfully extracted", userId);
         var userToTransfer = mapper.userToUserDto(user);
         return ResponseEntity.status(HttpStatus.OK).body(userToTransfer);

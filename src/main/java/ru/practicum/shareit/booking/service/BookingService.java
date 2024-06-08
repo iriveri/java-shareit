@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookingService {
-    Booking createBooking(Long userId, Booking bookingDto);
+    Booking create(Long userId, Booking bookingDto);
 
-    Booking updateBookingStatus(Long ownerId, Long bookingId, boolean approved);
+    Booking updateStatus(Long ownerId, Long bookingId, boolean approved);
 
-    Booking getBooking(Long userId, Long bookingId);
+    Booking getByIdAndUserId(Long userId, Long bookingId);
 
     List<Booking> getUserBookings(Long userId, String state, int offset, int limit);
 

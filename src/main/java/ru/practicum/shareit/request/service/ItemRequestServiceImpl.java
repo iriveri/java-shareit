@@ -10,8 +10,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ExtendedItemRequest;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.model.ItemResponse;
-import ru.practicum.shareit.request.storage.ItemRequestRepository;
-import ru.practicum.shareit.request.storage.ItemResponseRepository;
+import ru.practicum.shareit.request.storage.ItemRequestJpaRepository;
+import ru.practicum.shareit.request.storage.ItemResponseJpaRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import java.time.LocalDateTime;
@@ -20,13 +20,13 @@ import java.util.List;
 @Service
 public class ItemRequestServiceImpl implements ItemRequestService {
 
-    private final ItemRequestRepository requestRepository;
+    private final ItemRequestJpaRepository requestRepository;
 
-    private final ItemResponseRepository responseRepository;
+    private final ItemResponseJpaRepository responseRepository;
     private final UserServiceImpl userService;
 
     @Autowired
-    public ItemRequestServiceImpl(ItemRequestRepository requestRepository, ItemResponseRepository responseRepository, UserServiceImpl userService) {
+    public ItemRequestServiceImpl(ItemRequestJpaRepository requestRepository, ItemResponseJpaRepository responseRepository, UserServiceImpl userService) {
         this.requestRepository = requestRepository;
         this.responseRepository = responseRepository;
         this.userService = userService;
@@ -34,9 +34,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Transactional
     @Override
-    public ItemRequest createRequest(Long userId, ItemRequest itemRequest) {
+    public ItemRequest create(Long userId, ItemRequest itemRequest) {
         userService.validate(userId);
-        itemRequest.setRequester(userService.getUserById(userId));
+        itemRequest.setRequester(userService.getById(userId));
         itemRequest.setCreated(LocalDateTime.now());
         return requestRepository.save(itemRequest);
     }
@@ -52,7 +52,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ExtendedItemRequest getAdditionalItemInfo(ItemRequest itemRequest) {
+    public ExtendedItemRequest getExtendedRequest(ItemRequest itemRequest) {
         ExtendedItemRequest extendedRequest = new ExtendedItemRequest(itemRequest);
         var sad = responseRepository.findAllByRequest_Id(itemRequest.getId());
         extendedRequest.setResponses(sad);
@@ -73,7 +73,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ItemRequest getRequestById(Long userId, Long requestId) {
+    public ItemRequest getById(Long userId, Long requestId) {
         userService.validate(userId);
         return requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Request not found"));

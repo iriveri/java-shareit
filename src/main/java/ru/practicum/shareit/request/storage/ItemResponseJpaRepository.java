@@ -5,6 +5,6 @@ import ru.practicum.shareit.request.model.ItemResponse;
 
 import java.util.List;
 
-public interface ItemResponseRepository extends JpaRepository<ItemResponse, Long> {
+public interface ItemResponseJpaRepository extends JpaRepository<ItemResponse, Long> {
     List<ItemResponse> findAllByRequest_Id(Long responseItemId);
 }

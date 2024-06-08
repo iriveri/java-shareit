@@ -36,16 +36,16 @@ public class BookingServiceImpl implements BookingService {
 
     @Transactional
     @Override
-    public Booking createBooking(Long userId, Booking booking) {
+    public Booking create(Long userId, Booking booking) {
         validateUserAndItem(userId, booking);
-        booking.setBooker(userService.getUserById(userId));
+        booking.setBooker(userService.getById(userId));
         booking.setStatus(BookingStatus.WAITING);
         return bookingRepository.save(booking);
     }
 
     @Transactional
     @Override
-    public Booking updateBookingStatus(Long ownerId, Long bookingId, boolean approved) {
+    public Booking updateStatus(Long ownerId, Long bookingId, boolean approved) {
         userService.validate(ownerId);
         Booking booking = getBookingById(bookingId);
         if (!booking.getItem().getOwnerId().equals(ownerId)) {
@@ -61,7 +61,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public Booking getBooking(Long userId, Long bookingId) {
+    public Booking getByIdAndUserId(Long userId, Long bookingId) {
         userService.validate(userId);
         Booking booking = getBookingById(bookingId);
         if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
@@ -117,7 +117,7 @@ public class BookingServiceImpl implements BookingService {
     private void validateUserAndItem(Long userId, Booking booking) {
         userService.validate(userId);
         itemService.validate(booking.getItem().getId());
-        booking.setItem(itemService.getItemById(booking.getItem().getId()));
+        booking.setItem(itemService.getById(booking.getItem().getId()));
         if (!booking.getItem().getAvailable()) {
             throw new IllegalArgumentException("Cannot book unavailable item");
         }

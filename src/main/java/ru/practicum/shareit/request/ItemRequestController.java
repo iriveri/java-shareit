@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.request.dto.ItemRequestDataDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestMapper;
+import ru.practicum.shareit.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
@@ -45,9 +45,9 @@ public class ItemRequestController {
             @RequestHeader("X-Sharer-User-Id") Long userId
     ) {
         ItemRequest itemRequest = requestMapper.toItemRequest(requestDto);
-        itemRequest = requestService.createRequest(userId, itemRequest);
+        itemRequest = requestService.create(userId, itemRequest);
         log.info("Request for user with ID {} has been successfully created", userId);
-        ItemRequestDto createdRequestDto = requestMapper.toItemRequestDto(itemRequest);
+        ItemRequestDto createdRequestDto = requestMapper.toDto(itemRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRequestDto);
     }
 
@@ -59,15 +59,15 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего список.
      */
     @GetMapping
-    public ResponseEntity<List<ItemRequestDataDto>> getUserRequests(
+    public ResponseEntity<List<ItemRequestWithResponsesDto>> getUserRequests(
             @RequestHeader("X-Sharer-User-Id") Long userId
     ) {
         List<ItemRequest> requests = requestService.getUserRequests(userId);
         log.info("Requests for user with ID {} have been successfully fetched", userId);
-        List<ItemRequestDataDto> requestDtos = requests
+        List<ItemRequestWithResponsesDto> requestDtos = requests
                 .stream()
-                .map(requestService::getAdditionalItemInfo)
-                .map(requestMapper::toItemRequestDataDto)
+                .map(requestService::getExtendedRequest)
+                .map(requestMapper::toWithResponsesDto)
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(requestDtos);
     }
@@ -81,17 +81,17 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего список.
      */
     @GetMapping("/all")
-    public ResponseEntity<List<ItemRequestDataDto>> getAllRequests(
+    public ResponseEntity<List<ItemRequestWithResponsesDto>> getAllRequests(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
         List<ItemRequest> requests = requestService.getAllRequests(userId, offset, limit);
         log.info("All requests for user with ID {} have been successfully fetched", userId);
-        List<ItemRequestDataDto> requestDtos = requests
+        List<ItemRequestWithResponsesDto> requestDtos = requests
                 .stream()
-                .map(requestService::getAdditionalItemInfo)
-                .map(requestMapper::toItemRequestDataDto)
+                .map(requestService::getExtendedRequest)
+                .map(requestMapper::toWithResponsesDto)
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(requestDtos);
     }
@@ -103,14 +103,14 @@ public class ItemRequestController {
      * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, запросившего данные.
      */
     @GetMapping("/{requestId}")
-    public ResponseEntity<ItemRequestDataDto> getRequestById(
+    public ResponseEntity<ItemRequestWithResponsesDto> getRequestById(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @PathVariable Long requestId
     ) {
-        ItemRequest request = requestService.getRequestById(userId, requestId);
+        ItemRequest request = requestService.getById(userId, requestId);
         log.info("Request with ID {} for user with ID {} has been successfully fetched", requestId, userId);
-        var asa = requestService.getAdditionalItemInfo(request);
-        ItemRequestDataDto requestDto = requestMapper.toItemRequestDataDto(asa);
+        var asa = requestService.getExtendedRequest(request);
+        ItemRequestWithResponsesDto requestDto = requestMapper.toWithResponsesDto(asa);
         return ResponseEntity.status(HttpStatus.OK).body(requestDto);
     }
 }

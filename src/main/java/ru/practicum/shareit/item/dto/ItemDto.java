@@ -19,6 +19,5 @@ public class ItemDto {
     String description;
     @NotNull
     Boolean available;
-
     Long requestId;
 }

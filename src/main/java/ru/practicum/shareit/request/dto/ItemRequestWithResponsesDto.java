@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @EqualsAndHashCode(callSuper = true)
-public class ItemRequestDataDto extends ItemRequestDto {
+public class ItemRequestWithResponsesDto extends ItemRequestDto {
     List<ItemResponseDto> items;
 }
