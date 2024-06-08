@@ -8,16 +8,17 @@ import ru.practicum.shareit.request.model.ItemResponse;
 import java.util.List;
 
 public interface ItemRequestService {
-    ItemRequest createRequest(Long userId, ItemRequest requestDto);
+    ItemRequest create(Long userId, ItemRequest requestDto);
 
     ItemResponse createResponse(Item item, Long requestId);
 
-    ExtendedItemRequest getAdditionalItemInfo(ItemRequest item);
+    ItemRequest getById(Long userId, Long requestId);
+
+    ExtendedItemRequest getExtendedRequest(ItemRequest item);
 
     List<ItemRequest> getUserRequests(Long userId);
 
     List<ItemRequest> getAllRequests(Long userId, int offset, int limit);
 
-    ItemRequest getRequestById(Long userId, Long requestId);
 
 }

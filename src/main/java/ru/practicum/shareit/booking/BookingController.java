@@ -44,9 +44,9 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") Long bookerId
     ) {
         var booking = mapper.toBooking(bookingDto);
-        booking = service.createBooking(bookerId, booking);
+        booking = service.create(bookerId, booking);
         log.info("Booking for user with ID {} has been successfully created", bookerId);
-        var bookingToTransfer = mapper.toBookingResponseDto(booking);
+        var bookingToTransfer = mapper.toResponseDto(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingToTransfer);
     }
 
@@ -61,9 +61,9 @@ public class BookingController {
             @PathVariable Long bookingId,
             @RequestParam boolean approved
     ) {
-        var booking = service.updateBookingStatus(ownerId, bookingId, approved);
+        var booking = service.updateStatus(ownerId, bookingId, approved);
         log.info("Booking status for user with ID {} has been successfully updated", ownerId);
-        var bookingToTransfer = mapper.toBookingResponseDto(booking);
+        var bookingToTransfer = mapper.toResponseDto(booking);
         return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);
     }
 
@@ -77,9 +77,9 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @PathVariable Long bookingId
     ) {
-        var booking = service.getBooking(userId, bookingId);
+        var booking = service.getByIdAndUserId(userId, bookingId);
         log.info("Booking for user with ID {} has been successfully fetched", userId);
-        var bookingToTransfer = mapper.toBookingResponseDto(booking);
+        var bookingToTransfer = mapper.toResponseDto(booking);
         return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);
     }
 
@@ -97,7 +97,7 @@ public class BookingController {
     ) {
         var bookings = service.getUserBookings(userId, state, offset, limit);
         log.info("Bookings for user with ID {} have been successfully fetched", userId);
-        var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
+        var bookingsToTransfer = bookings.stream().map(mapper::toResponseDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(bookingsToTransfer);
     }
 
@@ -115,7 +115,7 @@ public class BookingController {
     ) {
         var bookings = service.getOwnerBookings(ownerId, state, offset, limit);
         log.info("Bookings for owner with ID {} have been successfully fetched", ownerId);
-        var bookingsToTransfer = bookings.stream().map(mapper::toBookingResponseDto).collect(Collectors.toList());
+        var bookingsToTransfer = bookings.stream().map(mapper::toResponseDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(bookingsToTransfer);
     }
 }

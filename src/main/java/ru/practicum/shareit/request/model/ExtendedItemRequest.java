@@ -2,10 +2,12 @@ package ru.practicum.shareit.request.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class ExtendedItemRequest extends ItemRequest {
     List<ItemResponse> responses;

@@ -49,7 +49,7 @@ public class ItemController {
         var item = itemMapper.toItem(itemDto);
         item = service.create(item, userId);
         log.info("New item is created with ID {}", item.getId());
-        var itemToTransfer = itemMapper.toItemDto(item);
+        var itemToTransfer = itemMapper.toDto(item);
         return ResponseEntity.status(HttpStatus.CREATED).body(itemToTransfer);
     }
 
@@ -68,7 +68,7 @@ public class ItemController {
         var item = itemMapper.toItem(itemDto);
         item = service.edit(itemId, item, userId);
         log.info("Item data for ID {} has been successfully patched", itemId);
-        var itemToTransfer = itemMapper.toItemDto(item);
+        var itemToTransfer = itemMapper.toDto(item);
         return ResponseEntity.status(HttpStatus.OK).body(itemToTransfer);
     }
 
@@ -82,10 +82,10 @@ public class ItemController {
             @PathVariable Long itemId,
             @RequestHeader("X-Sharer-User-Id") Long userId
     ) {
-        var item = service.getItemById(itemId);
-        var itemWithBooking = service.getAdditionalItemInfo(item, userId);
+        var item = service.getById(itemId);
+        var itemWithBooking = service.getExtendedItem(item, userId);
         log.info("Item data for ID {} has been successfully extracted", item.getId());
-        var itemToTransfer = itemMapper.toExtendedItemDto(itemWithBooking);
+        var itemToTransfer = itemMapper.toExtendedDto(itemWithBooking);
         return ResponseEntity.status(HttpStatus.OK).body(itemToTransfer);
     }
 
@@ -103,10 +103,10 @@ public class ItemController {
     ) {
         var items = service.getItemsByOwner(userId, offset, limit);
         var itemsWithBooking = items.stream()
-                .map(item -> service.getAdditionalItemInfo(item, userId))
+                .map(item -> service.getExtendedItem(item, userId))
                 .collect(Collectors.toList());
         log.info("List consisting of {} items has been successfully fetched", items.size());
-        var itemsToTransfer = itemsWithBooking.stream().map(itemMapper::toExtendedItemDto).collect(Collectors.toList());
+        var itemsToTransfer = itemsWithBooking.stream().map(itemMapper::toExtendedDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
     }
 
@@ -125,7 +125,7 @@ public class ItemController {
     ) {
         var items = service.searchItemsByText(text, offset, limit);
         log.info("List consisting of {} items has been successfully fetched", items.size());
-        var itemsToTransfer = items.stream().map(itemMapper::toItemDto).collect(Collectors.toList());
+        var itemsToTransfer = items.stream().map(itemMapper::toDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(itemsToTransfer);
     }
 
@@ -144,7 +144,7 @@ public class ItemController {
         var comment = commentMapper.toComment(commentDto);
         comment = service.addComment(itemId, userId, comment);
         log.info("Comment has been successfully added to item with ID {}", itemId);
-        var commentToTransfer = commentMapper.toCommentDto(comment);
+        var commentToTransfer = commentMapper.toDto(comment);
         return ResponseEntity.status(HttpStatus.OK).body(commentToTransfer);
     }
 }

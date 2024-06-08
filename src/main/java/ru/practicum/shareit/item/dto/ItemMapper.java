@@ -8,12 +8,12 @@ import ru.practicum.shareit.item.model.Item;
 
 @Mapper(uses = {CommentMapper.class, BookingMapper.class})
 public interface ItemMapper {
-    ItemDto toItemDto(Item item);
+    ItemDto toDto(Item item);
 
     Item toItem(ItemDto itemDto);
 
     @Mapping(source = "lastBooking", target = "lastBooking")
     @Mapping(source = "nextBooking", target = "nextBooking")
     @Mapping(source = "comments", target = "comments")
-    ExtendedItemDto toExtendedItemDto(ExtendedItem item);
+    ExtendedItemDto toExtendedDto(ExtendedItem item);
 }
