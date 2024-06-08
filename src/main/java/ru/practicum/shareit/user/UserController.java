@@ -22,7 +22,7 @@ public class UserController {
     private final UserMapper mapper;
 
     @Autowired
-    public UserController(@Qualifier("UserServiceImpl") UserService service, UserMapper mapper) {
+    public UserController(UserService service, UserMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
