@@ -46,8 +46,8 @@ public class ItemServiceImpl implements ItemService {
         userService.validate(ownerId);
         item.setOwnerId(ownerId);
         item = itemRepository.save(item);
-        if(item.getRequestId()!= null){
-            itemRequestService.createResponse(item,item.getRequestId());
+        if (item.getRequestId() != null) {
+            itemRequestService.createResponse(item, item.getRequestId());
         }
         return item;
     }
@@ -95,9 +95,9 @@ public class ItemServiceImpl implements ItemService {
     public ExtendedItem getAdditionalItemInfo(Item item, Long userId) {
         ExtendedItem extendedItem = new ExtendedItem(item);
 
-        bookingService.getLastBooking(item.getId(),userId)
+        bookingService.getLastBooking(item.getId(), userId)
                 .ifPresent(extendedItem::setLastBooking);
-        bookingService.getNextBooking(item.getId(),userId)
+        bookingService.getNextBooking(item.getId(), userId)
                 .ifPresent(extendedItem::setNextBooking);
 
         extendedItem.setComments(commentRepository.findByItemId(item.getId()));
