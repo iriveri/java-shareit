@@ -29,6 +29,7 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long>, JpaS
             "AND b.status = 'APPROVED' " +
             "AND b.item.ownerId = :userId ")
     Optional<Booking> getLastBooking(Long itemId, Long userId, LocalDateTime now);
+
     @Query("SELECT b FROM Booking b " +
             "WHERE b.start = " +
             "(SELECT MIN(bb.start) FROM Booking bb " +
@@ -40,6 +41,7 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long>, JpaS
             "AND b.status = 'APPROVED' " +
             "AND b.item.ownerId = :userId ")
     Optional<Booking> getNextBooking(Long itemId, Long userId, LocalDateTime now);
+
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.id = :itemId " +
             "AND (b.start < :end AND b.end > :start)")

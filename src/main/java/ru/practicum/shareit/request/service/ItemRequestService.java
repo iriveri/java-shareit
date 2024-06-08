@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ItemRequestService {
     ItemRequest createRequest(Long userId, ItemRequest requestDto);
+
     ItemResponse createResponse(Item item, Long requestId);
 
     ExtendedItemRequest getAdditionalItemInfo(ItemRequest item);
