@@ -91,7 +91,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional
     public ExtendedItem getExtendedItem(Item item, Long userId) {
         ExtendedItem extendedItem = new ExtendedItem(item);
 

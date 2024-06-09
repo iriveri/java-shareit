@@ -103,13 +103,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Booking> getLastBooking(Long itemId, Long userId) {
         return bookingRepository.getLastBooking(itemId, userId, LocalDateTime.now());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<Booking> getNextBooking(Long itemId, Long userId) {
         return bookingRepository.getNextBooking(itemId, userId, LocalDateTime.now());
     }

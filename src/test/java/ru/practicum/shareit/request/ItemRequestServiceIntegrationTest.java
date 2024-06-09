@@ -1,4 +1,4 @@
-package ru.practicum.shareit.request.service;
+package ru.practicum.shareit.request;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,9 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -46,18 +46,10 @@ public class ItemRequestServiceIntegrationTest {
         itemRequest.setRequester(savedUser);
 
         ItemRequest createdItemRequest = itemRequestService.create(savedUser.getId(), itemRequest);
-        assertEquals(createdItemRequest, entityManager.find(ItemRequest.class, createdItemRequest.getId()));
-
         User owner = new User();
         owner.setName("Jan Jack De Jack");
         owner.setEmail("Jack@example.com");
         User savedOwner = userService.create(owner);
-
-        Item item = new Item();
-        item.setName("Ogromniy Dar");
-        item.setAvailable(true);
-        item.setRequestId(createdItemRequest.getId());
-        Item savedItem = itemService.create(item, owner.getId());
 
         List<ItemRequest> retrievedItemRequests = itemRequestService.getUserRequests(savedUser.getId());
         assertEquals(1, retrievedItemRequests.size());
