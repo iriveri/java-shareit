@@ -1,8 +1,8 @@
 package ru.practicum.shareit.user.storage;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.DuplicateException;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @Repository
+@Qualifier("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
     private static long genId = 0;
     private final Map<Long, User> users = new HashMap<>();
@@ -33,17 +34,17 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void updateUser(Long userId, UserDto user) {
+    public void updateUser(Long userId, User updatedUser) {
         if (!contains(userId)) {
             throw new IllegalArgumentException("User with Id: " + userId + " not found in the list!");
         }
-        String email = user.getEmail();
+        String email = updatedUser.getEmail();
         if (email != null && users.values().stream().anyMatch(existingUser -> existingUser.getEmail().equals(email) && !Objects.equals(existingUser.getId(), userId))) {
             throw new DuplicateException("User with email " + email + " is already registered.");
         }
         User oldUser = users.get(userId);
-        if (user.getName() != null) {
-            oldUser.setName(user.getName());
+        if (updatedUser.getName() != null) {
+            oldUser.setName(updatedUser.getName());
         }
         if (email != null) {
             oldUser.setEmail(email);

@@ -1,15 +1,16 @@
 package ru.practicum.shareit.item.storage;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.DuplicateException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
+@Qualifier("InMemoryItemStorage")
 public class InMemoryItemStorage implements ItemStorage {
     private static long genId = 0;
     private final Map<Long, Item> items = new HashMap<>();
@@ -26,7 +27,7 @@ public class InMemoryItemStorage implements ItemStorage {
     }
 
     @Override
-    public void updateItem(Long itemId, ItemDto itemDto, Long ownerId) {
+    public void updateItem(Long itemId, Item newInfoItem, Long ownerId) {
         if (!contains(itemId)) {
             throw new IllegalArgumentException("Item with Id: " + itemId + " not found in the list!");
         }
@@ -34,14 +35,14 @@ public class InMemoryItemStorage implements ItemStorage {
         if (!Objects.equals(ownerId, item.getOwnerId())) {
             throw new NotFoundException(" ownerId: " + ownerId + " is illegal for this item");
         }
-        if (itemDto.getName() != null) {
-            item.setName(itemDto.getName());
+        if (newInfoItem.getName() != null) {
+            item.setName(newInfoItem.getName());
         }
-        if (itemDto.getDescription() != null) {
-            item.setDescription(itemDto.getDescription());
+        if (newInfoItem.getDescription() != null) {
+            item.setDescription(newInfoItem.getDescription());
         }
-        if (itemDto.getAvailable() != null) {
-            item.setAvailable(itemDto.getAvailable());
+        if (newInfoItem.getAvailable() != null) {
+            item.setAvailable(newInfoItem.getAvailable());
         }
 
         items.put(itemId, item);
