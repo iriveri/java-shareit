@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public boolean isUserBookedItem(Long userId, Long itemId) {
-        return bookingRepository.isUserBookedItem(userId, itemId, LocalDateTime.now());
+        return bookingRepository.haveUserBookedItem(userId, itemId, LocalDateTime.now());
     }
 
     @Override

@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 public class UserDto {
     private Long id;
     @NotNull(message = "e-mail отсутствует")
+    @NotBlank
     @Email(message = "Введён некоректный e-mail")
     private String email;
     @NotNull

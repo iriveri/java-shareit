@@ -17,7 +17,7 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long>, JpaS
             "AND b.status = 'APPROVED' " +
             "AND b.booker.id = :bookerId " +
             "AND b.end < :currentTime ")
-    boolean isUserBookedItem(Long bookerId, Long itemId, LocalDateTime currentTime);
+    boolean haveUserBookedItem(Long bookerId, Long itemId, LocalDateTime currentTime);
 
     @Query("SELECT b FROM Booking b " +
             "WHERE b.start = " +
