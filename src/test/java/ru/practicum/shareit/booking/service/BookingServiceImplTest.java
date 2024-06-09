@@ -194,12 +194,12 @@ class BookingServiceImplTest {
 
     @Test
     void isUserBookedItem_ShouldReturnTrue() {
-        when(bookingRepository.isUserBookedItem(1L, 1L, LocalDateTime.now())).thenReturn(true);
+        when(bookingRepository.haveUserBookedItem(eq(1L), eq(1L), any(LocalDateTime.class))).thenReturn(true);
 
         boolean result = bookingService.isUserBookedItem(1L, 1L);
 
         assertTrue(result);
-        verify(bookingRepository, times(1)).isUserBookedItem(eq(1L), eq(1L), any(LocalDateTime.class));
+        verify(bookingRepository, times(1)).haveUserBookedItem(eq(1L), eq(1L), any(LocalDateTime.class));
     }
 
     @Test
