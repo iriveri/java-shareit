@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -85,6 +84,7 @@ class ItemJpaRepositoryTest {
         assertThat(items).isNotNull();
         assertThat(items.getContent()).hasSize(2);  // Проверка количества найденных элементов
     }
+
     @Test
     @DisplayName("Test searchForItems pangoliation")
     void searchForItems_ShouldPangoliate() {
