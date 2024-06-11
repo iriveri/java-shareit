@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.domain.Specification;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.item.model.Item;
@@ -114,5 +115,75 @@ class BookingJpaRepositoryTest {
         List<Booking> bookings = bookingJpaRepository.findOverlappingBookings(itemId, start, end);
 
         assertThat(bookings).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Test hasState with APPROVED status")
+    void hasState_WithApprovedStatus_ShouldReturnMatchingBookings() {
+        Specification<Booking> spec = BookingSpecification.hasState("APPROVED");
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).hasSize(2); // Ожидаем два бронирования с статусом APPROVED
+    }
+
+    @Test
+    @DisplayName("Test isCurrent")
+    void isCurrent_ShouldReturnCurrentBookings() {
+        Specification<Booking> spec = BookingSpecification.isCurrent();
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).isEmpty(); // Нет текущих бронирований, так как тестовые данные не содержат текущих бронирований
+    }
+
+    @Test
+    @DisplayName("Test isPast")
+    void isPast_ShouldReturnPastBookings() {
+        Specification<Booking> spec = BookingSpecification.isPast();
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).hasSize(1); // Ожидаем одно прошлое бронирование
+    }
+
+    @Test
+    @DisplayName("Test isFuture")
+    void isFuture_ShouldReturnFutureBookings() {
+        Specification<Booking> spec = BookingSpecification.isFuture();
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).hasSize(1); // Ожидаем одно будущее бронирование
+    }
+
+    @Test
+    @DisplayName("Test byOwnerId")
+    void byOwnerId_ShouldReturnBookingsByOwner() {
+        Specification<Booking> spec = BookingSpecification.byOwnerId(owner.getId());
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).hasSize(2); // Ожидаем два бронирования по владельцу
+    }
+
+    @Test
+    @DisplayName("Test byBookerId")
+    void byBookerId_ShouldReturnBookingsByBooker() {
+        Specification<Booking> spec = BookingSpecification.byBookerId(user.getId());
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).hasSize(2); // Ожидаем два бронирования по бронирующему
+    }
+
+    @Test
+    @DisplayName("Test byItemId")
+    void byItemId_ShouldReturnBookingsByItem() {
+        Specification<Booking> spec = BookingSpecification.byItemId(item.getId());
+
+        List<Booking> bookings = bookingJpaRepository.findAll(spec);
+
+        assertThat(bookings).hasSize(2); // Ожидаем два бронирования по предмету
     }
 }
