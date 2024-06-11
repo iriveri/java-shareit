@@ -74,15 +74,21 @@ public class BookingControllerTest {
         bookingResponseDto.setEnd(booking.getEnd());
         bookingResponseDto.setStatus(booking.getStatus());
         bookingResponseDto.setItem(new ItemDto(1L, "Test Item", "Description", true, null));
+
+        when(bookingService.create(anyLong(), any(Booking.class))).thenReturn(booking);
+        when(bookingService.updateStatus(anyLong(), anyLong(), anyBoolean())).thenReturn(booking);
+        when(bookingMapper.toBooking(any(BookingRequestDto.class))).thenReturn(booking);
+        when(bookingMapper.toResponseDto(booking)).thenReturn(bookingResponseDto);
+        when(bookingService.getOwnerBookings(anyLong(), anyString(), anyInt(), anyInt()))
+                .thenReturn(Collections.singletonList(booking));
+        when(bookingService.getUserBookings(anyLong(), anyString(), anyInt(), anyInt()))
+                .thenReturn(Collections.singletonList(booking));
+        when(bookingService.getOwnersBookingById(anyLong(), anyLong())).thenReturn(booking);
     }
 
     @Test
     void createBooking_ShouldReturnCreated() throws Exception {
         BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
-
-        when(bookingService.create(anyLong(), any(Booking.class))).thenReturn(booking);
-        when(bookingMapper.toBooking(any(BookingRequestDto.class))).thenReturn(booking);
-        when(bookingMapper.toResponseDto(booking)).thenReturn(bookingResponseDto);
 
         mockMvc.perform(post("/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -114,10 +120,46 @@ public class BookingControllerTest {
     }
 
     @Test
-    void updateBookingStatus_ShouldReturnOk() throws Exception {
+    void createBooking_NoId_ShouldReturnBadRequest() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(null, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
 
-        when(bookingService.updateStatus(anyLong(), anyLong(), anyBoolean())).thenReturn(booking);
-        when(bookingMapper.toResponseDto(booking)).thenReturn(bookingResponseDto);
+        mockMvc.perform(post("/bookings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", 1L)
+                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
+    }
+
+    @Test
+    void createBooking_NoStart_ShouldReturnBadRequest() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, null, LocalDateTime.now().plusDays(1));
+
+        mockMvc.perform(post("/bookings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", 1L)
+                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
+    }
+
+    @Test
+    void createBooking_NoEnd_ShouldReturnBadRequest() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), null);
+
+        mockMvc.perform(post("/bookings")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-Sharer-User-Id", 1L)
+                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
+    }
+
+    @Test
+    void updateBookingStatus_ShouldReturnOk() throws Exception {
 
         mockMvc.perform(patch("/bookings/{bookingId}", 1)
                         .param("approved", "true")
@@ -132,8 +174,6 @@ public class BookingControllerTest {
 
     @Test
     void getBooking_ShouldReturnOk() throws Exception {
-        when(bookingService.getOwnersBookingById(anyLong(), anyLong())).thenReturn(booking);
-        when(bookingMapper.toResponseDto(booking)).thenReturn(bookingResponseDto);
 
         mockMvc.perform(get("/bookings/{bookingId}", 1)
                         .header("X-Sharer-User-Id", 1L))
@@ -151,9 +191,6 @@ public class BookingControllerTest {
 
     @Test
     void getUserBookings_ShouldReturnOk() throws Exception {
-        when(bookingService.getUserBookings(anyLong(), anyString(), anyInt(), anyInt()))
-                .thenReturn(Collections.singletonList(booking));
-        when(bookingMapper.toResponseDto(booking)).thenReturn(bookingResponseDto);
 
         mockMvc.perform(get("/bookings")
                         .header("X-Sharer-User-Id", 1L))
@@ -171,10 +208,34 @@ public class BookingControllerTest {
     }
 
     @Test
+    void getUserBookings_fromNegative_ShouldReturnBadRequest() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), null);
+
+        mockMvc.perform(get("/bookings")
+
+                        .header("X-Sharer-User-Id", 1L)
+                        .param("from", "-1")
+                        .param("size", "10"))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, times(0)).getUserBookings(anyLong(), anyString(), anyInt(), anyInt());
+    }
+
+    @Test
+    void getUserBookings_sizeOver100_ShouldReturnBadRequest() throws Exception {
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), null);
+
+        mockMvc.perform(get("/bookings")
+                        .header("X-Sharer-User-Id", 1L)
+                        .param("from", "0")
+                        .param("size", "101"))
+                .andExpect(status().isBadRequest());
+
+        verify(bookingService, times(0)).getUserBookings(anyLong(), anyString(), anyInt(), anyInt());
+    }
+
+    @Test
     void getOwnerBookings_ShouldReturnOk() throws Exception {
-        when(bookingService.getOwnerBookings(anyLong(), anyString(), anyInt(), anyInt()))
-                .thenReturn(Collections.singletonList(booking));
-        when(bookingMapper.toResponseDto(booking)).thenReturn(bookingResponseDto);
 
         mockMvc.perform(get("/bookings/owner")
                         .header("X-Sharer-User-Id", 1L))
