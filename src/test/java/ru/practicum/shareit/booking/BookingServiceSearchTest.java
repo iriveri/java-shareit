@@ -71,6 +71,14 @@ public class BookingServiceSearchTest {
         assertBookingsState("REJECTED", 1);
         assertBookingsState("APPROVED", 1);
         assertBookingsState("ALL", 5);
+
+        assertBookingsStateOwner("CURRENT", 1);
+        assertBookingsStateOwner("PAST", 1);
+        assertBookingsStateOwner("FUTURE", 3);
+        assertBookingsStateOwner("WAITING", 3);
+        assertBookingsStateOwner("REJECTED", 1);
+        assertBookingsStateOwner("APPROVED", 1);
+        assertBookingsStateOwner("ALL", 5);
     }
 
     private Booking createBooking(Item item, User user, LocalDateTime start, LocalDateTime end) {
@@ -83,7 +91,15 @@ public class BookingServiceSearchTest {
     }
 
     private void assertBookingsState(String state, int expectedSize) {
-        List<Booking> bookings = bookingService.getUserBookings(savedUser.getId(), state, 0, 10);
-        assertEquals(expectedSize, bookings.size(), "Unexpected number of bookings for state: " + state);
+        List<Booking> bookings1 = bookingService.getUserBookings(savedUser.getId(), state, 0, 10);
+        assertEquals(expectedSize, bookings1.size(), "Unexpected number of bookings for state: " + state);
+        List<Booking> bookings2 = bookingService.getOwnerBookings(savedOwner.getId(), state, 0, 10);
+        assertEquals(expectedSize, bookings2.size(), "Unexpected number of bookings for state: " + state);
+        List<Booking> bookings3 = bookingService.getItemBookings(savedItem.getId(), state, 0, 10);
+        assertEquals(expectedSize, bookings3.size(), "Unexpected number of bookings for state: " + state);
+    }
+
+    private void assertBookingsStateOwner(String state, int expectedSize) {
+
     }
 }
