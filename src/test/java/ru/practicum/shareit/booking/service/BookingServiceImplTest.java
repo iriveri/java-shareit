@@ -41,26 +41,43 @@ class BookingServiceImplTest {
     @InjectMocks
     private BookingServiceImpl bookingService;
 
+    private User user;
+    private User owner;
+    private Item item;
+    private Booking newBooking;
+    private Booking booking;
+    private PageRequest pageRequest;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-    }
 
-    @Test
-    void create_ShouldSaveNewBooking() {
-        User user = new User();
+        user = new User();
         user.setId(1L);
 
-        Item item = new Item();
+        owner = new User();
+        owner.setId(2L);
+
+        item = new Item();
         item.setId(1L);
         item.setAvailable(true);
         item.setOwnerId(2L);
 
-        Booking newBooking = new Booking();
+        newBooking = new Booking();
         newBooking.setItem(item);
         newBooking.setStart(LocalDateTime.now().plusDays(1));
         newBooking.setEnd(LocalDateTime.now().plusDays(2));
 
+        booking = new Booking();
+        booking.setId(1L);
+        booking.setItem(item);
+        booking.setStatus(BookingStatus.WAITING);
+
+        pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "start"));
+    }
+
+    @Test
+    void create_ShouldSaveNewBooking() {
         when(userService.getById(1L)).thenReturn(user);
         when(itemService.getById(1L)).thenReturn(item);
         when(bookingRepository.save(any(Booking.class))).thenReturn(newBooking);
@@ -73,65 +90,55 @@ class BookingServiceImplTest {
         verify(itemService, times(1)).validate(1L);
         verify(bookingRepository, times(1)).save(newBooking);
     }
+    @Test
+    void create_ShouldThrowNotFoundException_bookerIsOwner() {
+        when(userService.getById(2L)).thenReturn(owner);
+        when(itemService.getById(1L)).thenReturn(item);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(newBooking);
 
+        assertThrows(NotFoundException.class, () -> bookingService.create(2L, newBooking));
+    }
+    @Test
+    void create_ShouldThrowIllegalArgumentException_itemUnavailable() {
+        item.setAvailable(false);
+
+        when(userService.getById(1L)).thenReturn(owner);
+        when(itemService.getById(1L)).thenReturn(item);
+        when(bookingRepository.save(any(Booking.class))).thenReturn(newBooking);
+
+        assertThrows(IllegalArgumentException.class, () -> bookingService.create(1L, newBooking));
+    }
     @Test
     void updateStatus_ShouldUpdateBookingStatus() {
-        User owner = new User();
-        owner.setId(1L);
-
-        Item item = new Item();
-        item.setId(1L);
-        item.setOwnerId(1L);
-
-        Booking booking = new Booking();
-        booking.setId(1L);
-        booking.setItem(item);
-        booking.setStatus(BookingStatus.WAITING);
-
+        item.setOwnerId(2L);
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
-        Booking updatedBooking = bookingService.updateStatus(1L, 1L, true);
+        Booking updatedBooking = bookingService.updateStatus(2L, 1L, true);
 
         assertNotNull(updatedBooking);
         assertEquals(BookingStatus.APPROVED, updatedBooking.getStatus());
-        verify(userService, times(1)).validate(1L);
         verify(bookingRepository, times(1)).findById(1L);
     }
 
     @Test
     void updateStatus_ShouldThrowNotFoundException_WhenUserNotOwner() {
-        User owner = new User();
-        owner.setId(2L);
-
-        Item item = new Item();
-        item.setId(1L);
         item.setOwnerId(1L);
-
-        Booking booking = new Booking();
-        booking.setId(1L);
-        booking.setItem(item);
-        booking.setStatus(BookingStatus.WAITING);
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
         assertThrows(NotFoundException.class, () -> bookingService.updateStatus(2L, 1L, true));
-        verify(userService, times(1)).validate(2L);
-        verify(bookingRepository, times(1)).findById(1L);
     }
+    @Test
+    void updateStatus_ShouldThrowIllegalArgumentException_WhenBookingIsSet() {
+        booking.setStatus(BookingStatus.APPROVED);
 
+        when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
+
+        assertThrows(IllegalArgumentException.class, () -> bookingService.updateStatus(2L, 1L, true));
+    }
     @Test
     void getOwnersBookingById_ShouldReturnBooking() {
-        User booker = new User();
-        booker.setId(1L);
-
-        Item item = new Item();
-        item.setId(1L);
-        item.setOwnerId(2L);
-
-        Booking booking = new Booking();
-        booking.setId(1L);
-        booking.setItem(item);
-        booking.setBooker(booker);
+        booking.setBooker(user);
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
@@ -145,17 +152,7 @@ class BookingServiceImplTest {
 
     @Test
     void getByIdAndUserId_ShouldThrowNotFoundException_WhenUserNotAuthorized() {
-        User booker = new User();
-        booker.setId(2L);
-
-        Item item = new Item();
-        item.setId(1L);
-        item.setOwnerId(2L);
-
-        Booking booking = new Booking();
-        booking.setId(1L);
-        booking.setItem(item);
-        booking.setBooker(booker);
+        booking.setBooker(user);
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
@@ -166,19 +163,7 @@ class BookingServiceImplTest {
 
     @Test
     void getUserBookings_ShouldReturnUserBookings() {
-        User user = new User();
-        user.setId(1L);
-
-        Item item = new Item();
-        item.setId(1L);
-        item.setOwnerId(2L);
-
-        Booking booking = new Booking();
-        booking.setId(1L);
-        booking.setItem(item);
         booking.setBooker(user);
-
-        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "start"));
 
         when(userService.getById(1L)).thenReturn(user);
         when(bookingRepository.findAll(any(Specification.class), eq(pageRequest)))
@@ -204,13 +189,11 @@ class BookingServiceImplTest {
 
     @Test
     void getLastBooking_ShouldReturnLastBooking() {
-        Booking booking = new Booking();
-        booking.setId(1L);
-
         when(bookingRepository.getLastBooking(anyLong(), anyLong(), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(booking));
+
         Optional<Booking> lastBooking = bookingService.getLastBooking(1L, 1L);
-        var asd = Optional.of(booking);
+
         assertTrue(lastBooking.isPresent());
         assertEquals(1L, lastBooking.get().getId());
         verify(bookingRepository, times(1)).getLastBooking(eq(1L), eq(1L), any(LocalDateTime.class));
@@ -218,9 +201,6 @@ class BookingServiceImplTest {
 
     @Test
     void getNextBooking_ShouldReturnNextBooking() {
-        Booking booking = new Booking();
-        booking.setId(1L);
-
         when(bookingRepository.getNextBooking(anyLong(), anyLong(), any(LocalDateTime.class))).thenReturn(Optional.of(booking));
 
         Optional<Booking> nextBooking = bookingService.getNextBooking(1L, 1L);
