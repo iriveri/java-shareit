@@ -90,6 +90,7 @@ class BookingServiceImplTest {
         verify(itemService, times(1)).validate(1L);
         verify(bookingRepository, times(1)).save(newBooking);
     }
+
     @Test
     void create_ShouldThrowNotFoundException_bookerIsOwner() {
         when(userService.getById(2L)).thenReturn(owner);
@@ -98,6 +99,7 @@ class BookingServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> bookingService.create(2L, newBooking));
     }
+
     @Test
     void create_ShouldThrowIllegalArgumentException_itemUnavailable() {
         item.setAvailable(false);
@@ -108,6 +110,7 @@ class BookingServiceImplTest {
 
         assertThrows(IllegalArgumentException.class, () -> bookingService.create(1L, newBooking));
     }
+
     @Test
     void updateStatus_ShouldUpdateBookingStatus() {
         item.setOwnerId(2L);
@@ -128,6 +131,7 @@ class BookingServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> bookingService.updateStatus(2L, 1L, true));
     }
+
     @Test
     void updateStatus_ShouldThrowIllegalArgumentException_WhenBookingIsSet() {
         booking.setStatus(BookingStatus.APPROVED);
@@ -136,6 +140,7 @@ class BookingServiceImplTest {
 
         assertThrows(IllegalArgumentException.class, () -> bookingService.updateStatus(2L, 1L, true));
     }
+
     @Test
     void getOwnersBookingById_ShouldReturnBooking() {
         booking.setBooker(user);
