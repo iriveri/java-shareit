@@ -40,7 +40,7 @@ public class CommentDtoTest {
 
     @Test
     void testSerialize() throws Exception {
-        CommentDto dto = new CommentDto(1L, "CommentText", "AuthorName", LocalDateTime.now());
+        CommentDto dto = new CommentDto(1L, "AuthorName", "CommentText", LocalDateTime.now());
 
         String json = objectMapper.writeValueAsString(dto);
         assertThat(json).contains("\"id\":1");
@@ -70,7 +70,7 @@ public class CommentDtoTest {
 
     @Test
     void testInvalidCommentDto_EmptyText() {
-        CommentDto dto = new CommentDto(1L, "", "AuthorName", LocalDateTime.now());
+        CommentDto dto = new CommentDto(1L, "AuthorName", "", LocalDateTime.now());
 
         Set<ConstraintViolation<CommentDto>> violations = validator.validate(dto);
 

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.item.dto.CommentMapper;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.request.model.ExtendedItemRequest;
 import ru.practicum.shareit.request.model.ItemRequest;
 
@@ -25,6 +28,27 @@ class ItemRequestMapperTest {
         public ItemRequestMapper itemRequestMapper() {
             return Mappers.getMapper(ItemRequestMapper.class);
         }
+
+        @Bean
+        public ItemResponseMapper itemResponseMapper() {
+            return Mappers.getMapper(ItemResponseMapper.class);
+        }
+
+        @Bean
+        public ItemMapper itemMapper() {
+            return Mappers.getMapper(ItemMapper.class);
+        }
+
+        @Bean
+        public CommentMapper commentMapper() {
+            return Mappers.getMapper(CommentMapper.class);
+        }
+
+        @Bean
+        public BookingMapper bookingMapper() {
+            return Mappers.getMapper(BookingMapper.class);
+        }
+
     }
 
     @Test

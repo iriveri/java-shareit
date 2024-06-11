@@ -59,6 +59,6 @@ CREATE TABLE IF NOT EXISTS item_response
     response_item_id BIGINT                                  NOT NULL,
     request_id       BIGINT                                  NOT NULL,
     CONSTRAINT pk_item_response PRIMARY KEY (id),
-    CONSTRAINT fk_response_item_id FOREIGN KEY (id) REFERENCES item (id),
-    CONSTRAINT fk_request FOREIGN KEY (id) REFERENCES item_request (id)
+    CONSTRAINT fk_response_item_id FOREIGN KEY (response_item_id) REFERENCES item (id),
+    CONSTRAINT fk_request FOREIGN KEY (request_id) REFERENCES item_request (id)
 );
