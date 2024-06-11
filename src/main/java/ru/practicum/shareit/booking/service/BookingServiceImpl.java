@@ -132,22 +132,13 @@ public class BookingServiceImpl implements BookingService {
 
 
     private Specification<Booking> createSpecification(String state) {
-        switch (state.toUpperCase()) {
-            case "CURRENT":
-                return BookingSpecification.isCurrent();
-            case "PAST":
-                return BookingSpecification.isPast();
-            case "FUTURE":
-                return BookingSpecification.isFuture();
-            case "WAITING":
-            case "REJECTED":
-            case "APPROVED":
-            case "CANCELED":
-                return BookingSpecification.hasState(state);
-            case "ALL":
-                return (root, query, cb) -> cb.conjunction();
-            default:
-                throw new IllegalArgumentException("Unknown state: " + state);
-        }
+        return switch (state.toUpperCase()) {
+            case "CURRENT" -> BookingSpecification.isCurrent();
+            case "PAST" -> BookingSpecification.isPast();
+            case "FUTURE" -> BookingSpecification.isFuture();
+            case "WAITING", "REJECTED", "APPROVED", "CANCELED" -> BookingSpecification.hasState(state);
+            case "ALL" -> (root, query, cb) -> cb.conjunction();
+            default -> throw new IllegalArgumentException("Unknown state: " + state);
+        };
     }
 }
