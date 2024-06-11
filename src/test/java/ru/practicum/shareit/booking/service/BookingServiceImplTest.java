@@ -120,7 +120,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void getByIdAndUserId_ShouldReturnBooking() {
+    void getOwnersBookingById_ShouldReturnBooking() {
         User booker = new User();
         booker.setId(1L);
 
@@ -135,7 +135,7 @@ class BookingServiceImplTest {
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
-        Booking foundBooking = bookingService.getByIdAndUserId(1L, 1L);
+        Booking foundBooking = bookingService.getOwnersBookingById(1L, 1L);
 
         assertNotNull(foundBooking);
         assertEquals(1L, foundBooking.getId());
@@ -159,7 +159,7 @@ class BookingServiceImplTest {
 
         when(bookingRepository.findById(1L)).thenReturn(Optional.of(booking));
 
-        assertThrows(NotFoundException.class, () -> bookingService.getByIdAndUserId(3L, 1L));
+        assertThrows(NotFoundException.class, () -> bookingService.getOwnersBookingById(3L, 1L));
         verify(userService, times(1)).validate(3L);
         verify(bookingRepository, times(1)).findById(1L);
     }

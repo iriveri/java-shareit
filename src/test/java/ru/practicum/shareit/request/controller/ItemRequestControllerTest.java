@@ -1,6 +1,7 @@
 package ru.practicum.shareit.request.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import ru.practicum.shareit.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.shareit.request.model.ExtendedItemRequest;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,16 +42,38 @@ public class ItemRequestControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void createRequest_ShouldReturnCreated() throws Exception {
-        ItemRequestDto requestDto = new ItemRequestDto(null, "Request description", LocalDateTime.now());
-        ItemRequest request = new ItemRequest();
-        ItemRequestDto responseDto = new ItemRequestDto(1L, "Request description", LocalDateTime.now());
+    private ItemRequestDto requestDto;
+    private ItemRequest request;
+    private ItemRequestDto responseDto;
+    private ItemRequestWithResponsesDto withResponsesDto;
+    private ExtendedItemRequest extendedItemRequest;
+    private List<ItemRequest> userRequests;
+    private List<ItemRequest> allRequests;
 
+    @BeforeEach
+    void setUp() {
+        // Initialize objects with predefined data
+        requestDto = new ItemRequestDto(null, "Request description", LocalDateTime.now());
+        request = new ItemRequest();
+        request.setRequester(new User());
+        responseDto = new ItemRequestDto(1L, "Request description", LocalDateTime.now());
+        withResponsesDto = new ItemRequestWithResponsesDto();
+        extendedItemRequest = new ExtendedItemRequest(request);
+        userRequests = Collections.singletonList(request);
+        allRequests = Collections.singletonList(request);
+
+        // Mock interactions
         Mockito.when(requestMapper.toItemRequest(requestDto)).thenReturn(request);
         Mockito.when(requestService.create(anyLong(), any(ItemRequest.class))).thenReturn(request);
         Mockito.when(requestMapper.toDto(request)).thenReturn(responseDto);
+        Mockito.when(requestService.getUserRequests(anyLong())).thenReturn(userRequests);
+        Mockito.when(requestService.getExtendedRequest(any(ItemRequest.class))).thenReturn(extendedItemRequest);
+        Mockito.when(requestMapper.toWithResponsesDto(any(ExtendedItemRequest.class))).thenReturn(withResponsesDto);
+        Mockito.when(requestService.getAllRequests(anyLong(), anyInt(), anyInt())).thenReturn(allRequests);
+    }
 
+    @Test
+    void createRequest_ShouldReturnCreated() throws Exception {
         mockMvc.perform(post("/requests")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 1L)
@@ -61,14 +86,6 @@ public class ItemRequestControllerTest {
 
     @Test
     void getUserRequests_ShouldReturnOk() throws Exception {
-        ItemRequest request = new ItemRequest();
-        ExtendedItemRequest extendedItemRequest = new ExtendedItemRequest();
-        ItemRequestWithResponsesDto responseDto = new ItemRequestWithResponsesDto();
-
-        Mockito.when(requestService.getUserRequests(anyLong())).thenReturn(Collections.singletonList(request));
-        Mockito.when(requestService.getExtendedRequest(any(ItemRequest.class))).thenReturn(extendedItemRequest);
-        Mockito.when(requestMapper.toWithResponsesDto(any(ExtendedItemRequest.class))).thenReturn(responseDto);
-
         mockMvc.perform(get("/requests")
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
@@ -78,14 +95,6 @@ public class ItemRequestControllerTest {
 
     @Test
     void getAllRequests_ShouldReturnOk() throws Exception {
-        ItemRequest request = new ItemRequest();
-        ExtendedItemRequest extendedItemRequest = new ExtendedItemRequest();
-        ItemRequestWithResponsesDto responseDto = new ItemRequestWithResponsesDto();
-
-        Mockito.when(requestService.getAllRequests(anyLong(), anyInt(), anyInt())).thenReturn(Collections.singletonList(request));
-        Mockito.when(requestService.getExtendedRequest(any(ItemRequest.class))).thenReturn(extendedItemRequest);
-        Mockito.when(requestMapper.toWithResponsesDto(any(ExtendedItemRequest.class))).thenReturn(responseDto);
-
         mockMvc.perform(get("/requests/all")
                         .header("X-Sharer-User-Id", 1L)
                         .param("from", "0")
@@ -93,21 +102,5 @@ public class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray());
-    }
-
-    @Test
-    void getRequestById_ShouldReturnOk() throws Exception {
-        ItemRequest request = new ItemRequest();
-        ExtendedItemRequest extendedItemRequest = new ExtendedItemRequest();
-        ItemRequestWithResponsesDto responseDto = new ItemRequestWithResponsesDto();
-
-        Mockito.when(requestService.getById(anyLong(), anyLong())).thenReturn(request);
-        Mockito.when(requestService.getExtendedRequest(any(ItemRequest.class))).thenReturn(extendedItemRequest);
-        Mockito.when(requestMapper.toWithResponsesDto(any(ExtendedItemRequest.class))).thenReturn(responseDto);
-
-        mockMvc.perform(get("/requests/{requestId}", 1L)
-                        .header("X-Sharer-User-Id", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }

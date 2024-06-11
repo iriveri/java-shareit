@@ -6,7 +6,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.request.model.ExtendedItemRequest;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.model.User;
@@ -51,8 +53,17 @@ public class ItemRequestServiceIntegrationTest {
         owner.setEmail("Jack@example.com");
         User savedOwner = userService.create(owner);
 
+        Item item = new Item();
+        item.setName("Small Dar");
+        item.setAvailable(true);
+        item.setRequestId(createdItemRequest.getId());
+        Item savedItem = itemService.create(item, owner.getId());
+
         List<ItemRequest> retrievedItemRequests = itemRequestService.getUserRequests(savedUser.getId());
         assertEquals(1, retrievedItemRequests.size());
         assertEquals(createdItemRequest.getId(), retrievedItemRequests.get(0).getId());
+
+        ExtendedItemRequest extendedItemRequest = itemRequestService.getExtendedRequest(retrievedItemRequests.get(0));
+        assertEquals(extendedItemRequest.getResponses().get(0).getResponseItem().getId(), savedItem.getId());
     }
 }

@@ -35,10 +35,10 @@ public class UserController {
     public ResponseEntity<UserDto> createUser(
             @Valid @RequestBody UserDto newUser
     ) {
-        var user = mapper.dtoUserToUser(newUser);
+        var user = mapper.toUser(newUser);
         user = service.create(user);
         log.info("New user is created with ID {}", user.getId());
-        var userToTransfer = mapper.userToUserDto(user);
+        var userToTransfer = mapper.toDto(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userToTransfer);
     }
 
@@ -52,10 +52,10 @@ public class UserController {
             @PathVariable Long userId,
             @RequestBody UserDto userDto
     ) {
-        var user = mapper.dtoUserToUser(userDto);
+        var user = mapper.toUser(userDto);
         user = service.edit(userId, user);
         log.info("User data for ID {} has been successfully patched", userId);
-        var userToTransfer = mapper.userToUserDto(user);
+        var userToTransfer = mapper.toDto(user);
         return ResponseEntity.status(HttpStatus.OK).body(userToTransfer);
     }
 
@@ -69,7 +69,7 @@ public class UserController {
     ) {
         var user = service.getById(userId);
         log.info("User data for ID {} has been successfully extracted", userId);
-        var userToTransfer = mapper.userToUserDto(user);
+        var userToTransfer = mapper.toDto(user);
         return ResponseEntity.status(HttpStatus.OK).body(userToTransfer);
     }
 
@@ -94,7 +94,7 @@ public class UserController {
     public ResponseEntity<Object> getAllUsers() {
         var users = service.getAllUsers();
         log.info("List consisting of {} users has been successfully fetched", users.size());
-        var usersToTransfer = users.stream().map(mapper::userToUserDto).collect(Collectors.toList());
+        var usersToTransfer = users.stream().map(mapper::toDto).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(usersToTransfer);
     }
 }

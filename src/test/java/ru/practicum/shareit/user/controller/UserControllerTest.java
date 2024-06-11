@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,24 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private User user;
+    private UserDto userDto;
+
+    @BeforeEach
+    void setUp() {
+        user = new User();
+        user.setName("John Doe");
+        user.setEmail("john.doe@example.com");
+
+        userDto = new UserDto();
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
+    }
+
     @Test
     void createUser_ShouldReturnCreated() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setName("John Doe");
-        userDto.setEmail("john.doe@example.com");
-        User user = new User();
-        Mockito.when(userMapper.dtoUserToUser(userDto)).thenReturn(user);
-        Mockito.when(userMapper.userToUserDto(user)).thenReturn(userDto);
+        Mockito.when(userMapper.toUser(userDto)).thenReturn(user);
+        Mockito.when(userMapper.toDto(user)).thenReturn(userDto);
         Mockito.when(userService.create(user)).thenReturn(user);
 
         mockMvc.perform(post("/users")
@@ -55,8 +66,6 @@ public class UserControllerTest {
 
     @Test
     void createUser_InvalidEmail_ShouldReturnBadRequest() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setName("John Doe");
         userDto.setEmail("invalid-email");
 
         mockMvc.perform(post("/users")
@@ -68,9 +77,7 @@ public class UserControllerTest {
 
     @Test
     void createUser_EmptyName_ShouldReturnBadRequest() throws Exception {
-        UserDto userDto = new UserDto();
         userDto.setName("");
-        userDto.setEmail("john.doe@example.com");
 
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -81,10 +88,8 @@ public class UserControllerTest {
 
     @Test
     void editUser_ShouldReturnOk() throws Exception {
-        UserDto userDto = new UserDto();
-        User user = new User();
-        Mockito.when(userMapper.dtoUserToUser(userDto)).thenReturn(user);
-        Mockito.when(userMapper.userToUserDto(user)).thenReturn(userDto);
+        Mockito.when(userMapper.toUser(userDto)).thenReturn(user);
+        Mockito.when(userMapper.toDto(user)).thenReturn(userDto);
         Mockito.when(userService.edit(anyLong(), any())).thenReturn(user);
 
         mockMvc.perform(patch("/users/{userId}", 1)
@@ -97,10 +102,8 @@ public class UserControllerTest {
 
     @Test
     void getUser_ShouldReturnOk() throws Exception {
-        UserDto userDto = new UserDto();
-        User user = new User();
         Mockito.when(userService.getById(anyLong())).thenReturn(user);
-        Mockito.when(userMapper.userToUserDto(user)).thenReturn(userDto);
+        Mockito.when(userMapper.toDto(user)).thenReturn(userDto);
 
         mockMvc.perform(get("/users/{userId}", 1))
                 .andExpect(status().isOk())
@@ -115,10 +118,8 @@ public class UserControllerTest {
 
     @Test
     void getAllUsers_ShouldReturnOk() throws Exception {
-        UserDto userDto = new UserDto();
-        User user = new User();
         Mockito.when(userService.getAllUsers()).thenReturn(Collections.singletonList(user));
-        Mockito.when(userMapper.userToUserDto(user)).thenReturn(userDto);
+        Mockito.when(userMapper.toDto(user)).thenReturn(userDto);
 
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk())

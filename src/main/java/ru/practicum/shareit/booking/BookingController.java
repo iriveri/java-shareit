@@ -43,8 +43,8 @@ public class BookingController {
             @Valid @RequestBody BookingRequestDto bookingDto,
             @RequestHeader("X-Sharer-User-Id") Long bookerId
     ) {
-        var booking = mapper.toBooking(bookingDto);
-        booking = service.create(bookerId, booking);
+        var newBooking = mapper.toBooking(bookingDto);
+        var booking = service.create(bookerId, newBooking);
         log.info("Booking for user with ID {} has been successfully created", bookerId);
         var bookingToTransfer = mapper.toResponseDto(booking);
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingToTransfer);
@@ -77,7 +77,7 @@ public class BookingController {
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @PathVariable Long bookingId
     ) {
-        var booking = service.getByIdAndUserId(userId, bookingId);
+        var booking = service.getOwnersBookingById(userId, bookingId);
         log.info("Booking for user with ID {} has been successfully fetched", userId);
         var bookingToTransfer = mapper.toResponseDto(booking);
         return ResponseEntity.status(HttpStatus.OK).body(bookingToTransfer);

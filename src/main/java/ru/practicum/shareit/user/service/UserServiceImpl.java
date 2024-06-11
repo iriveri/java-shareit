@@ -31,13 +31,17 @@ public class UserServiceImpl implements UserService {
     public User edit(Long userId, User newInfo) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+        updateUserInfo(existingUser, newInfo);
+        return existingUser;
+    }
+
+    private void updateUserInfo(User existingUser, User newInfo) {
         if (newInfo.getName() != null) {
             existingUser.setName(newInfo.getName());
         }
         if (newInfo.getEmail() != null) {
             existingUser.setEmail(newInfo.getEmail());
         }
-        return existingUser;
     }
 
     @Override

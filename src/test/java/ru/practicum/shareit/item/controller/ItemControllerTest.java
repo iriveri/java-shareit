@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +40,29 @@ public class ItemControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Test
-    void addItem_ShouldReturnCreated() throws Exception {
-        ItemDto itemDto = new ItemDto();
+    private ItemDto itemDto;
+    private Item item;
+    private ExtendedItem extendedItem;
+    private ExtendedItemDto extendedItemDto;
+
+    @BeforeEach
+    void setUp() {
+        itemDto = new ItemDto();
         itemDto.setName("Item name");
         itemDto.setDescription("Item description");
         itemDto.setAvailable(true);
-        Item item = new Item();
+
+        item = new Item();
+        item.setName("Item name");
+        item.setDescription("Item description");
+        item.setAvailable(true);
+
+        extendedItem = new ExtendedItem(item);
+        extendedItemDto = new ExtendedItemDto();
+    }
+
+    @Test
+    void addItem_ShouldReturnCreated() throws Exception {
         Mockito.when(itemMapper.toItem(itemDto)).thenReturn(item);
         Mockito.when(itemMapper.toDto(item)).thenReturn(itemDto);
         Mockito.when(itemService.create(item, 1L)).thenReturn(item);
@@ -55,15 +72,15 @@ public class ItemControllerTest {
                         .header("X-Sharer-User-Id", 1L)
                         .content(objectMapper.writeValueAsString(itemDto)))
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(itemDto.getName()))
+                .andExpect(jsonPath("$.description").value(itemDto.getDescription()))
+                .andExpect(jsonPath("$.available").value(itemDto.getAvailable()));
     }
 
     @Test
     void addItem_EmptyName_ShouldReturnBadRequest() throws Exception {
-        ItemDto itemDto = new ItemDto();
         itemDto.setName("");
-        itemDto.setDescription("Item description");
-        itemDto.setAvailable(true);
 
         mockMvc.perform(post("/items")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -75,29 +92,27 @@ public class ItemControllerTest {
 
     @Test
     void editItem_ShouldReturnOk() throws Exception {
-        ItemDto itemDto = new ItemDto();
         itemDto.setName("Updated name");
         itemDto.setDescription("Updated description");
         itemDto.setAvailable(true);
-        Item item = new Item();
+
         Mockito.when(itemMapper.toItem(itemDto)).thenReturn(item);
         Mockito.when(itemMapper.toDto(item)).thenReturn(itemDto);
-        Mockito.when(itemService.edit(anyLong(), any(), anyLong())).thenReturn(item);
+        Mockito.when(itemService.edit(anyLong(), any(Item.class), anyLong())).thenReturn(item);
 
         mockMvc.perform(patch("/items/{itemId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 1L)
                         .content(objectMapper.writeValueAsString(itemDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(itemDto.getName()))
+                .andExpect(jsonPath("$.description").value(itemDto.getDescription()))
+                .andExpect(jsonPath("$.available").value(itemDto.getAvailable()));
     }
 
     @Test
     void getItem_ShouldReturnOk() throws Exception {
-        ItemDto itemDto = new ItemDto();
-        Item item = new Item();
-        ExtendedItem extendedItem = new ExtendedItem(item);
-        ExtendedItemDto extendedItemDto = new ExtendedItemDto();
         Mockito.when(itemService.getById(anyLong())).thenReturn(item);
         Mockito.when(itemService.getExtendedItem(item, 1L)).thenReturn(extendedItem);
         Mockito.when(itemMapper.toExtendedDto(extendedItem)).thenReturn(extendedItemDto);
@@ -105,31 +120,29 @@ public class ItemControllerTest {
         mockMvc.perform(get("/items/{itemId}", 1)
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(extendedItemDto.getName()))
+                .andExpect(jsonPath("$.description").value(extendedItemDto.getDescription()))
+                .andExpect(jsonPath("$.available").value(extendedItemDto.getAvailable()));
     }
-
 
     @Test
     void getAllItems_ShouldReturnOk() throws Exception {
-        ItemDto itemDto = new ItemDto();
-        Item item = new Item();
-        ExtendedItem extendedItem = new ExtendedItem(item);
-        ExtendedItemDto extendedItemDto = new ExtendedItemDto();
         Mockito.when(itemService.getItemsByOwner(anyLong(), anyInt(), anyInt())).thenReturn(Collections.singletonList(item));
-        Mockito.when(itemService.getExtendedItem(any(), anyLong())).thenReturn(extendedItem);
+        Mockito.when(itemService.getExtendedItem(any(Item.class), anyLong())).thenReturn(extendedItem);
         Mockito.when(itemMapper.toExtendedDto(extendedItem)).thenReturn(extendedItemDto);
 
         mockMvc.perform(get("/items")
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$[0].name").value(extendedItemDto.getName()))
+                .andExpect(jsonPath("$[0].description").value(extendedItemDto.getDescription()))
+                .andExpect(jsonPath("$[0].available").value(extendedItemDto.getAvailable()));
     }
 
     @Test
     void searchItemsByText_ShouldReturnOk() throws Exception {
-        ItemDto itemDto = new ItemDto();
-        Item item = new Item();
         Mockito.when(itemService.searchItemsByText(anyString(), anyInt(), anyInt())).thenReturn(Collections.singletonList(item));
         Mockito.when(itemMapper.toDto(item)).thenReturn(itemDto);
 
@@ -138,7 +151,9 @@ public class ItemControllerTest {
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$[0].name").value(itemDto.getName()))
+                .andExpect(jsonPath("$[0].description").value(itemDto.getDescription()))
+                .andExpect(jsonPath("$[0].available").value(itemDto.getAvailable()));
     }
 
     @Test
@@ -148,14 +163,15 @@ public class ItemControllerTest {
         Comment comment = new Comment();
         Mockito.when(commentMapper.toComment(commentDto)).thenReturn(comment);
         Mockito.when(commentMapper.toDto(comment)).thenReturn(commentDto);
-        Mockito.when(itemService.addComment(anyLong(), anyLong(), any())).thenReturn(comment);
+        Mockito.when(itemService.addComment(anyLong(), anyLong(), any(Comment.class))).thenReturn(comment);
 
         mockMvc.perform(post("/items/{itemId}/comment", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", 1L)
                         .content(objectMapper.writeValueAsString(commentDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.text").value(commentDto.getText()));
     }
 
     @Test

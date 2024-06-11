@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.ConstraintViolation;
@@ -16,7 +16,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-@Import(ItemDtoTest.Config.class)
+
 public class ItemDtoTest {
 
     @Autowired
@@ -25,6 +25,7 @@ public class ItemDtoTest {
     @Autowired
     private Validator validator;
 
+    @TestConfiguration
     static class Config {
         @Bean
         public LocalValidatorFactoryBean validatorFactoryBean() {

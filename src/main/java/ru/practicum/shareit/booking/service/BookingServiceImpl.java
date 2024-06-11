@@ -61,7 +61,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     @Transactional(readOnly = true)
-    public Booking getByIdAndUserId(Long userId, Long bookingId) {
+    public Booking getOwnersBookingById(Long userId, Long bookingId) {
         userService.validate(userId);
         Booking booking = getBookingById(bookingId);
         if (!booking.getBooker().getId().equals(userId) && !booking.getItem().getOwnerId().equals(userId)) {
@@ -124,7 +124,8 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private Booking getBookingById(Long bookingId) {
+    @Override
+    public Booking getBookingById(Long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking not found"));
     }

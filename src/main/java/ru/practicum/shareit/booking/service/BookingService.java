@@ -11,7 +11,7 @@ public interface BookingService {
 
     Booking updateStatus(Long ownerId, Long bookingId, boolean approved);
 
-    Booking getByIdAndUserId(Long userId, Long bookingId);
+    Booking getOwnersBookingById(Long userId, Long bookingId);
 
     List<Booking> getUserBookings(Long userId, String state, int offset, int limit);
 
@@ -24,4 +24,6 @@ public interface BookingService {
     Optional<Booking> getLastBooking(Long itemId, Long userId);
 
     Optional<Booking> getNextBooking(Long itemId, Long userId);
+
+    Booking getBookingById(Long bookingId);
 }
