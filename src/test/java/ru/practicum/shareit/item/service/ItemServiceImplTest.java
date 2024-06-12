@@ -12,7 +12,6 @@ import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.CommentJpaRepository;
 import ru.practicum.shareit.item.storage.ItemJpaRepository;
-import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -38,8 +37,6 @@ class ItemServiceImplTest {
     @Mock
     private BookingService bookingService;
 
-    @Mock
-    private ItemRequestService itemRequestService;
 
     @InjectMocks
     private ItemServiceImpl itemService;
@@ -98,6 +95,24 @@ class ItemServiceImplTest {
         when(itemRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> itemService.edit(1L, newItem, 1L));
+        verify(itemRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void edit_ShouldThrowIllegalArgumentException_WhenUserNotOwner() {
+        Item existingItem = new Item();
+        existingItem.setId(1L);
+        existingItem.setName("Item 1");
+        existingItem.setDescription("Description 1");
+        existingItem.setOwnerId(2L); // Different owner ID
+
+        Item newItem = new Item();
+        newItem.setName("Updated Item");
+        newItem.setDescription("Updated Description");
+
+        when(itemRepository.findById(1L)).thenReturn(Optional.of(existingItem));
+
+        assertThrows(IllegalArgumentException.class, () -> itemService.edit(1L, newItem, 1L));
         verify(itemRepository, times(1)).findById(1L);
     }
 

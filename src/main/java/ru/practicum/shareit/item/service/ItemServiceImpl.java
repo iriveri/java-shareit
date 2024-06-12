@@ -13,7 +13,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.CommentJpaRepository;
 import ru.practicum.shareit.item.storage.ItemJpaRepository;
 import ru.practicum.shareit.request.service.ItemRequestService;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.transaction.Transactional;
@@ -122,7 +121,9 @@ public class ItemServiceImpl implements ItemService {
     public Comment addComment(Long itemId, Long userId, Comment comment) {
         var item = getById(itemId);
         var user = userService.getById(userId);
-        validateUserHasRentedItem(item, user);
+        if (!bookingService.isUserBookedItem(user.getId(), item.getId())) {
+            throw new IllegalArgumentException("User has not rented this item");
+        }
 
         comment.setItem(item);
         comment.setUser(user);
@@ -131,9 +132,4 @@ public class ItemServiceImpl implements ItemService {
         return commentRepository.save(comment);
     }
 
-    private void validateUserHasRentedItem(Item item, User user) {
-        if (!bookingService.isUserBookedItem(user.getId(), item.getId())) {
-            throw new IllegalArgumentException("User has not rented this item");
-        }
-    }
 }
