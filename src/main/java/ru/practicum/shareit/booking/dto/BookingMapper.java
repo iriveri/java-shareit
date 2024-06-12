@@ -2,10 +2,13 @@ package ru.practicum.shareit.booking.dto;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 import ru.practicum.shareit.booking.model.Booking;
 
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BookingMapper {
 
     @Mapping(source = "itemId", target = "item.id")

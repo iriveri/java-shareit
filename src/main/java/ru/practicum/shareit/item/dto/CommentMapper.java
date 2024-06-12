@@ -2,9 +2,12 @@ package ru.practicum.shareit.item.dto;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 import ru.practicum.shareit.item.model.Comment;
 
-@Mapper
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
     @Mapping(source = "user.name", target = "authorName")
     CommentDto toDto(Comment comment);
