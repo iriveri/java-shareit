@@ -36,9 +36,12 @@ public class ItemController {
     /**
      * Добавление новой вещи.
      * Endpoint: POST /items
-     * Принимает объект ItemDto в теле запроса.
-     * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, добавляющего вещь.
-     * Владелец вещи должен быть указан в заголовке запроса.
+     * Этот метод принимает объект {@link ItemDto} в теле запроса.
+     * Идентификатор пользователя, добавляющего вещь, передается в заголовке X-Sharer-User-Id.
+     *
+     * @param itemDto объект {@link ItemDto}, представляющий новую вещь
+     * @param userId  идентификатор пользователя, добавляющего вещь, передается в заголовке X-Sharer-User-Id
+     * @return {@link ResponseEntity} содержащий добавленный объект {@link ItemDto} и статус ответа {@link HttpStatus#CREATED}
      */
     @PostMapping
     public ResponseEntity<ItemDto> addItem(
@@ -57,6 +60,11 @@ public class ItemController {
      * Endpoint: PATCH /items/{itemId}
      * Позволяет изменить название, описание и статус доступа к аренде вещи.
      * Редактировать вещь может только её владелец.
+     *
+     * @param itemId  идентификатор редактируемой вещи
+     * @param itemDto объект {@link ItemDto}, содержащий новые данные для вещи
+     * @param userId  идентификатор пользователя, владельца вещи, передается в заголовке X-Sharer-User-Id
+     * @return {@link ResponseEntity} содержащий обновленный объект {@link ItemDto} и статус ответа {@link HttpStatus#OK}
      */
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> editItem(
@@ -75,6 +83,10 @@ public class ItemController {
      * Просмотр информации о конкретной вещи.
      * Endpoint: GET /items/{itemId}
      * Информацию о вещи может просмотреть любой пользователь.
+     *
+     * @param itemId идентификатор запрашиваемой вещи
+     * @param userId идентификатор пользователя, просматривающего информацию, передается в заголовке X-Sharer-User-Id
+     * @return {@link ResponseEntity} содержащий объект {@link ItemDto} с информацией о вещи и статус ответа {@link HttpStatus#OK}
      */
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemDto> getItem(
@@ -90,9 +102,14 @@ public class ItemController {
 
     /**
      * Просмотр списка всех вещей пользователя.
-     * Endpoint: GET /items?from={from}&size{size}
+     * Endpoint: GET /items?from={from}&size={size}
      * Возвращает список всех вещей пользователя с указанием их названия и описания.
-     * В запросе присутствует пагинация: from - индекс первого элемента, size - количество элементов для отображения
+     * В запросе присутствует пагинация: from - индекс первого элемента, size - количество элементов для отображения.
+     *
+     * @param userId идентификатор пользователя, передается в заголовке X-Sharer-User-Id
+     * @param offset смещение для постраничного вывода
+     * @param limit  количество записей для постраничного вывода
+     * @return {@link ResponseEntity} содержащий список объектов {@link ItemDto} и статус ответа {@link HttpStatus#OK}
      */
     @GetMapping
     public ResponseEntity<Object> getAllItems(
@@ -111,10 +128,15 @@ public class ItemController {
 
     /**
      * Поиск вещей по тексту.
-     * Endpoint: GET /items/search?text={text}from={from}&size{size}
+     * Endpoint: GET /items/search?text={text}&from={from}&size={size}
      * Пользователь передает в строке запроса текст, по которому осуществляется поиск вещей.
      * Возвращает только доступные для аренды вещи.
-     * В запросе присутствует пагинация: from - индекс первого элемента, size - количество элементов для отображения
+     * В запросе присутствует пагинация: from - индекс первого элемента, size - количество элементов для отображения.
+     *
+     * @param text   текст для поиска
+     * @param offset смещение для постраничного вывода
+     * @param limit  количество записей для постраничного вывода
+     * @return {@link ResponseEntity} содержащий список объектов {@link ItemDto} и статус ответа {@link HttpStatus#OK}
      */
     @GetMapping("/search")
     public ResponseEntity<Object> searchItemsByText(
@@ -131,8 +153,13 @@ public class ItemController {
     /**
      * Добавление комментария к вещи.
      * Endpoint: POST /items/{itemId}/comment
-     * Принимает объект CommentDto в теле запроса.
-     * userId в заголовке X-Sharer-User-Id — идентификатор пользователя, добавляющего комментарий.
+     * Этот метод принимает объект {@link CommentDto} в теле запроса.
+     * Идентификатор пользователя, добавляющего комментарий, передается в заголовке X-Sharer-User-Id.
+     *
+     * @param itemId     идентификатор вещи, к которой добавляется комментарий
+     * @param commentDto объект {@link CommentDto}, представляющий новый комментарий
+     * @param userId     идентификатор пользователя, добавляющего комментарий, передается в заголовке X-Sharer-User-Id
+     * @return {@link ResponseEntity} содержащий добавленный объект {@link CommentDto} и статус ответа {@link HttpStatus#OK}
      */
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<CommentDto> addComment(

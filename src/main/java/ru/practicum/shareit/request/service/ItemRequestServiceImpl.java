@@ -21,7 +21,6 @@ import java.util.List;
 public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestJpaRepository requestRepository;
-
     private final ItemResponseJpaRepository responseRepository;
     private final UserServiceImpl userService;
 

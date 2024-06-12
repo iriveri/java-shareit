@@ -29,7 +29,10 @@ public class UserController {
     /**
      * Создание нового пользователя.
      * Endpoint: POST /users
-     * Принимает объект UserDto в теле запроса.
+     * Принимает объект {@link UserDto} в теле запроса.
+     *
+     * @param newUser объект {@link UserDto}, представляющий нового пользователя
+     * @return {@link ResponseEntity} содержащий созданный объект {@link UserDto} и статус ответа {@link HttpStatus#CREATED}
      */
     @PostMapping
     public ResponseEntity<UserDto> createUser(
@@ -46,6 +49,10 @@ public class UserController {
      * Редактирование пользователя.
      * Endpoint: PATCH /users/{userId}
      * Позволяет изменить информацию о пользователе.
+     *
+     * @param userId  идентификатор пользователя, данные которого необходимо изменить
+     * @param userDto объект {@link UserDto}, содержащий измененные данные пользователя
+     * @return {@link ResponseEntity} содержащий обновленный объект {@link UserDto} и статус ответа {@link HttpStatus#OK}
      */
     @PatchMapping("/{userId}")
     public ResponseEntity<UserDto> editUser(
@@ -62,6 +69,9 @@ public class UserController {
     /**
      * Просмотр информации о конкретном пользователе.
      * Endpoint: GET /users/{userId}
+     *
+     * @param userId идентификатор пользователя, информацию о котором необходимо получить
+     * @return {@link ResponseEntity} содержащий объект {@link UserDto} с данными пользователя и статус ответа {@link HttpStatus#OK}
      */
     @GetMapping("/{userId}")
     public ResponseEntity<UserDto> getUser(
@@ -76,6 +86,9 @@ public class UserController {
     /**
      * Удаление пользователя.
      * Endpoint: DELETE /users/{userId}
+     *
+     * @param userId идентификатор пользователя, которого необходимо удалить
+     * @return {@link ResponseEntity} со статусом ответа {@link HttpStatus#OK}
      */
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(
@@ -89,6 +102,8 @@ public class UserController {
     /**
      * Просмотр списка всех пользователей.
      * Endpoint: GET /users
+     *
+     * @return {@link ResponseEntity} содержащий список объектов {@link UserDto} и статус ответа {@link HttpStatus#OK}
      */
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {
