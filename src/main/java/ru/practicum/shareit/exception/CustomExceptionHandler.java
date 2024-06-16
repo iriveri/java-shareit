@@ -23,16 +23,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errors, headers, status, request);
     }
 
-    @ExceptionHandler(DuplicateException.class)
-    public ResponseEntity<Object> handleDuplicateException(DuplicateException ex, WebRequest request) {
-        return handleExceptionInternal(ex, Map.of("error", ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT, request);
-    }
-
-    @ExceptionHandler(NotValidException.class)
-    public ResponseEntity<Object> handleNotValidException(NotValidException ex, WebRequest request) {
-        return handleExceptionInternal(ex, Map.of("error", ex.getMessage()), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
         return handleExceptionInternal(ex, Map.of("error", ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND, request);

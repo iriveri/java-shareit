@@ -3,8 +3,8 @@ package ru.practicum.shareit.item.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Comment;
@@ -12,15 +12,12 @@ import ru.practicum.shareit.item.model.ExtendedItem;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.CommentJpaRepository;
 import ru.practicum.shareit.item.storage.ItemJpaRepository;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Qualifier("ItemServiceImpl")
@@ -30,14 +27,16 @@ public class ItemServiceImpl implements ItemService {
     private final CommentJpaRepository commentRepository;
     private final UserService userService;
     private final BookingService bookingService;
+    private final ItemRequestService itemRequestService;
 
     @Autowired
     public ItemServiceImpl(ItemJpaRepository itemRepository, CommentJpaRepository commentRepository,
-                           UserService userService, @Lazy BookingService bookingService) {
+                           UserService userService, @Lazy BookingService bookingService, ItemRequestService itemRequestService) {
         this.itemRepository = itemRepository;
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.bookingService = bookingService;
+        this.itemRequestService = itemRequestService;
     }
 
     @Override
@@ -45,7 +44,11 @@ public class ItemServiceImpl implements ItemService {
     public Item create(Item item, Long ownerId) {
         userService.validate(ownerId);
         item.setOwnerId(ownerId);
-        return itemRepository.save(item);
+        item = itemRepository.save(item);
+        if (item.getRequestId() != null) {
+            itemRequestService.createResponse(item, item.getRequestId());
+        }
+        return item;
     }
 
     @Override
@@ -81,52 +84,46 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItemById(Long itemId) {
+    public Item getById(Long itemId) {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Item not found"));
     }
 
     @Override
-    @Transactional
-    public ExtendedItem getAdditionalItemInfo(Item item, Long userId) {
+    public ExtendedItem getExtendedItem(Item item, Long userId) {
         ExtendedItem extendedItem = new ExtendedItem(item);
-        var bookings = bookingService.getItemBookings(item.getId(), "APPROVED")
-                .stream()
-                .filter(booking -> booking.getItem().getOwnerId().equals(userId))
-                .collect(Collectors.toList());
 
-        Optional<Booking> lastBooking = bookings.stream()
-                .filter(booking -> booking.getStart().isBefore(LocalDateTime.now()))
-                .max(Comparator.comparing(Booking::getStart));
+        bookingService.getLastBooking(item.getId(), userId)
+                .ifPresent(extendedItem::setLastBooking);
+        bookingService.getNextBooking(item.getId(), userId)
+                .ifPresent(extendedItem::setNextBooking);
 
-        Optional<Booking> nextBooking = bookings.stream()
-                .filter(booking -> booking.getStart().isAfter(LocalDateTime.now()))
-                .min(Comparator.comparing(Booking::getStart));
-
-        lastBooking.ifPresent(extendedItem::setLastBooking);
-        nextBooking.ifPresent(extendedItem::setNextBooking);
         extendedItem.setComments(commentRepository.findByItemId(item.getId()));
 
         return extendedItem;
     }
 
     @Override
-    public Collection<Item> getItemsByOwner(Long ownerId) {
+    public Collection<Item> getItemsByOwner(Long ownerId, int offset, int limit) {
         userService.validate(ownerId);
-        return itemRepository.findByOwnerId(ownerId);
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit);
+        return itemRepository.findByOwnerId(ownerId, pageRequest).getContent();
     }
 
     @Override
-    public Collection<Item> searchItemsByText(String text) {
-        return itemRepository.searchForItems(text);
+    public Collection<Item> searchItemsByText(String text, int offset, int limit) {
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit);
+        return itemRepository.searchForItems(text, pageRequest).getContent();
     }
 
     @Override
     @Transactional
     public Comment addComment(Long itemId, Long userId, Comment comment) {
-        var item = getItemById(itemId);
-        var user = userService.getUserById(userId);
-        validateUserHasRentedItem(item, user);
+        var item = getById(itemId);
+        var user = userService.getById(userId);
+        if (!bookingService.isUserBookedItem(user.getId(), item.getId())) {
+            throw new IllegalArgumentException("User has not rented this item");
+        }
 
         comment.setItem(item);
         comment.setUser(user);
@@ -135,14 +132,4 @@ public class ItemServiceImpl implements ItemService {
         return commentRepository.save(comment);
     }
 
-    private void validateUserHasRentedItem(Item item, User user) {
-        var bookingList = bookingService.getUserBookings(user.getId(), "APPROVED")
-                .stream()
-                .filter(booking -> booking.getEnd().isBefore(LocalDateTime.now()) && booking.getItem().getId().equals(item.getId()))
-                .collect(Collectors.toList());
-
-        if (bookingList.isEmpty()) {
-            throw new IllegalArgumentException("User has not rented this item");
-        }
-    }
 }
