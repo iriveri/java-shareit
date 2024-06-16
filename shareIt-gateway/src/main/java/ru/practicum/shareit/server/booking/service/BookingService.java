@@ -42,12 +42,14 @@ public class BookingService {
     @Cacheable(value = "userBookings", key = "#userId + ':' + #state + ':' + #offset + ':' + #limit")
     public List<BookingResponseDto> getUserBookings(Long userId, String state, int offset, int limit) {
         String url = String.format("http://main-application/bookings?state=%s&from=%d&size=%d", state, offset, limit);
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<BookingResponseDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<BookingResponseDto>>() {
+        }).getBody();
     }
 
     @Cacheable(value = "ownerBookings", key = "#ownerId + ':' + #state + ':' + #offset + ':' + #limit")
     public List<BookingResponseDto> getOwnerBookings(Long ownerId, String state, int offset, int limit) {
         String url = String.format("http://main-application/bookings/owner?state=%s&from=%d&size=%d", state, offset, limit);
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<BookingResponseDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<BookingResponseDto>>() {
+        }).getBody();
     }
 }

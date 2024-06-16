@@ -30,13 +30,15 @@ public class ItemRequestService {
     @Cacheable(value = "userRequests", key = "#userId")
     public List<ItemRequestWithResponsesDto> getUserRequests(Long userId) {
         String url = String.format("http://main-application/requests?userId=%d", userId);
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemRequestWithResponsesDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemRequestWithResponsesDto>>() {
+        }).getBody();
     }
 
     @Cacheable(value = "allRequests", key = "#userId + ':' + #offset + ':' + #limit")
     public List<ItemRequestWithResponsesDto> getAllRequests(Long userId, int offset, int limit) {
         String url = String.format("http://main-application/requests/all?from=%d&size=%d", offset, limit);
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemRequestWithResponsesDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemRequestWithResponsesDto>>() {
+        }).getBody();
     }
 
     @Cacheable(value = "requestsById", key = "#userId + ':' + #requestId")

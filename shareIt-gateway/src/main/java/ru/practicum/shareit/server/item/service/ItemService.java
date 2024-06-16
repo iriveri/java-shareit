@@ -3,6 +3,7 @@ package ru.practicum.shareit.server.item.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,8 +31,8 @@ public class ItemService {
     @Cacheable(value = "items", key = "#itemId + ':' + #itemDto.toString() + #userId")
     public ItemDto edit(Long itemId, ItemDto itemDto, Long userId) {
         String url = String.format("http://main-application/items/%d", itemId);
-        restTemplate.put(url, itemDto);
-        return itemDto;
+        HttpEntity<ItemDto> requestEntity = new HttpEntity<>(itemDto);
+        return restTemplate.exchange(url, HttpMethod.PUT, requestEntity, ItemDto.class).getBody();
     }
 
     @Cacheable(value = "items", key = "#itemId + ':' + #userId")
@@ -43,13 +44,15 @@ public class ItemService {
     @Cacheable(value = "itemsByOwner", key = "#userId + ':' + #offset + ':' + #limit")
     public List<ItemDto> getItemsByOwner(Long userId, int offset, int limit) {
         String url = String.format("http://main-application/items?from=%d&size=%d", offset, limit);
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemDto>>() {
+        }).getBody();
     }
 
     @Cacheable(value = "itemsSearch", key = "#text + ':' + #offset + ':' + #limit")
     public List<ItemDto> searchItemsByText(String text, int offset, int limit) {
         String url = String.format("http://main-application/items/search?text=%s&from=%d&size=%d", text, offset, limit);
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<ItemDto>>() {
+        }).getBody();
     }
 
     @Cacheable(value = "comments", key = "#itemId + ':' + #commentDto.toString() + #userId")

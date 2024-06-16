@@ -10,7 +10,6 @@ import ru.practicum.shareit.server.item.dto.CommentDto;
 import ru.practicum.shareit.server.item.dto.ItemDto;
 import ru.practicum.shareit.server.item.service.ItemService;
 
-
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

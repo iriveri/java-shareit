@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -31,7 +32,8 @@ public class UserService {
     public UserDto edit(Long userId, UserDto user) {
         String url = String.format("http://main-application/users/%d", userId);
         restTemplate.put(url, user);
-        return user;
+        HttpEntity<UserDto> requestEntity = new HttpEntity<>(user);
+        return restTemplate.exchange(url, HttpMethod.PUT, requestEntity, UserDto.class).getBody();
     }
 
     @Cacheable(value = "users", key = "#userId")
@@ -49,6 +51,7 @@ public class UserService {
     @Cacheable(value = "users")
     public List<UserDto> getAllUsers() {
         String url = "http://main-application/users";
-        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDto>>() {}).getBody();
+        return restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDto>>() {
+        }).getBody();
     }
 }

@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.server.booking.model.BookingStatus;
-import ru.practicum.shareit.server.user.dto.UserDto;
 import ru.practicum.shareit.server.item.dto.ItemDto;
+import ru.practicum.shareit.server.user.dto.UserDto;
 
 import java.time.LocalDateTime;
 
