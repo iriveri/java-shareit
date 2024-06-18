@@ -1,6 +1,7 @@
-package ru.practicum.shareit.common.item.dto;
+package ru.practicum.shareit.server.item.mapper;
 
-import ru.practicum.shareit.common.item.model.Comment;
+import ru.practicum.shareit.common.item.dto.CommentDto;
+import ru.practicum.shareit.server.item.model.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

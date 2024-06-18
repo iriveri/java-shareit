@@ -1,6 +1,7 @@
-package ru.practicum.shareit.common.user.dto;
+package ru.practicum.shareit.server.user.mapper;
 
-import ru.practicum.shareit.common.user.model.User;
+import ru.practicum.shareit.common.user.dto.UserDto;
+import ru.practicum.shareit.server.user.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

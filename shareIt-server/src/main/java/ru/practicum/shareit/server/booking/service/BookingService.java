@@ -1,7 +1,7 @@
 package ru.practicum.shareit.server.booking.service;
 
 
-import ru.practicum.shareit.common.booking.model.Booking;
+import ru.practicum.shareit.server.booking.model.Booking;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
-package ru.practicum.shareit.common.item.model;
+package ru.practicum.shareit.server.item.model;
 
-import ru.practicum.shareit.common.booking.model.Booking;
+import ru.practicum.shareit.server.booking.model.Booking;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

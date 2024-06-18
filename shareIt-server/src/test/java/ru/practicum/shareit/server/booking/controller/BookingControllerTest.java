@@ -13,7 +13,7 @@ import ru.practicum.shareit.server.booking.dto.BookingMapper;
 import ru.practicum.shareit.server.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.server.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.server.booking.model.Booking;
-import ru.practicum.shareit.server.booking.model.BookingStatus;
+import ru.practicum.shareit.common.booking.model.BookingStatus;
 import ru.practicum.shareit.server.booking.service.BookingService;
 import ru.practicum.shareit.server.item.dto.ItemDto;
 import ru.practicum.shareit.server.item.model.Item;

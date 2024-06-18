@@ -1,8 +1,10 @@
-package ru.practicum.shareit.common.item.dto;
+package ru.practicum.shareit.server.item.mapper;
 
-import ru.practicum.shareit.common.booking.dto.BookingMapper;
-import ru.practicum.shareit.common.item.model.ExtendedItem;
-import ru.practicum.shareit.common.item.model.Item;
+import ru.practicum.shareit.server.booking.mapper.BookingMapper;
+import ru.practicum.shareit.common.item.dto.ExtendedItemDto;
+import ru.practicum.shareit.common.item.dto.ItemDto;
+import ru.practicum.shareit.server.item.model.ExtendedItem;
+import ru.practicum.shareit.server.item.model.Item;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.common.booking.dto.BookingMapper;
 import ru.practicum.shareit.common.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.common.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.server.booking.mapper.BookingMapper;
 import ru.practicum.shareit.server.booking.service.BookingService;
 
 import java.util.List;

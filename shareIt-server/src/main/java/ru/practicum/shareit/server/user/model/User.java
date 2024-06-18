@@ -1,4 +1,4 @@
-package ru.practicum.shareit.common.user.model;
+package ru.practicum.shareit.server.user.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

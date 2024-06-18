@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import ru.practicum.shareit.server.booking.model.Booking;
-import ru.practicum.shareit.server.booking.model.BookingStatus;
+import ru.practicum.shareit.common.booking.model.BookingStatus;
 import ru.practicum.shareit.server.item.model.Item;
 import ru.practicum.shareit.server.user.model.User;
 

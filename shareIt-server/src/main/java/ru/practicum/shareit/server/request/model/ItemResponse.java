@@ -1,6 +1,6 @@
-package ru.practicum.shareit.common.request.model;
+package ru.practicum.shareit.server.request.model;
 
-import ru.practicum.shareit.common.item.model.Item;
+import ru.practicum.shareit.server.item.model.Item;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

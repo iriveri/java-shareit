@@ -3,7 +3,7 @@ package ru.practicum.shareit.server.request.storage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.practicum.shareit.common.request.model.ItemRequest;
+import ru.practicum.shareit.server.request.model.ItemRequest;
 
 import java.util.List;
 

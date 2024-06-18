@@ -1,10 +1,11 @@
-package ru.practicum.shareit.common.request.dto;
+package ru.practicum.shareit.server.request.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import ru.practicum.shareit.common.request.model.ItemResponse;
+import ru.practicum.shareit.common.request.dto.ItemResponseDto;
+import ru.practicum.shareit.server.request.model.ItemResponse;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)

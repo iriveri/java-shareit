@@ -1,9 +1,10 @@
-package ru.practicum.shareit.common.booking.model;
+package ru.practicum.shareit.server.booking.model;
 
-import ru.practicum.shareit.common.user.model.User;
+import ru.practicum.shareit.common.booking.model.BookingStatus;
+import ru.practicum.shareit.server.user.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.common.item.model.Item;
+import ru.practicum.shareit.server.item.model.Item;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

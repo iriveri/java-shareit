@@ -5,7 +5,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.common.item.model.Item;
+import ru.practicum.shareit.server.item.model.Item;
 
 
 @Repository

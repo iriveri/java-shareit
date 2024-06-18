@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.common.request.dto.ItemRequestDto;
-import ru.practicum.shareit.common.request.dto.ItemRequestMapper;
 import ru.practicum.shareit.common.request.dto.ItemRequestWithResponsesDto;
-import ru.practicum.shareit.common.request.model.ItemRequest;
+import ru.practicum.shareit.server.request.mapper.ItemRequestMapper;
+import ru.practicum.shareit.server.request.model.ItemRequest;
 import ru.practicum.shareit.server.request.service.ItemRequestService;
 
 import java.util.List;

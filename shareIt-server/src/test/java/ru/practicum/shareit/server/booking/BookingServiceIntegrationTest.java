@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.server.booking.model.Booking;
-import ru.practicum.shareit.server.booking.model.BookingStatus;
+import ru.practicum.shareit.common.booking.model.BookingStatus;
 import ru.practicum.shareit.server.booking.service.BookingService;
 import ru.practicum.shareit.server.item.model.Item;
 import ru.practicum.shareit.server.item.service.ItemService;

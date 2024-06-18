@@ -1,9 +1,9 @@
 package ru.practicum.shareit.server.request.service;
 
-import ru.practicum.shareit.common.request.model.ItemResponse;
-import ru.practicum.shareit.common.item.model.Item;
-import ru.practicum.shareit.common.request.model.ExtendedItemRequest;
-import ru.practicum.shareit.common.request.model.ItemRequest;
+import ru.practicum.shareit.server.request.model.ItemResponse;
+import ru.practicum.shareit.server.item.model.Item;
+import ru.practicum.shareit.server.request.model.ExtendedItemRequest;
+import ru.practicum.shareit.server.request.model.ItemRequest;
 
 import java.util.List;
 

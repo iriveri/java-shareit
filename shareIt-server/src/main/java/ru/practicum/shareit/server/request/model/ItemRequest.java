@@ -1,8 +1,8 @@
-package ru.practicum.shareit.common.request.model;
+package ru.practicum.shareit.server.request.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.common.user.model.User;
+import ru.practicum.shareit.server.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

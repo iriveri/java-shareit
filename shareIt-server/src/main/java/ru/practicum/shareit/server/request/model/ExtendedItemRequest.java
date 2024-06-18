@@ -1,4 +1,4 @@
-package ru.practicum.shareit.common.request.model;
+package ru.practicum.shareit.server.request.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
