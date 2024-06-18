@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.server.exception.NotFoundException;
-import ru.practicum.shareit.server.user.model.User;
+import ru.practicum.shareit.common.user.model.User;
 import ru.practicum.shareit.server.user.storage.UserJpaRepository;
 
 import javax.transaction.Transactional;

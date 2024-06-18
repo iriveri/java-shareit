@@ -6,8 +6,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.shareit.server.request.dto.ItemRequestDto;
-import ru.practicum.shareit.server.request.dto.ItemRequestWithResponsesDto;
+import ru.practicum.shareit.common.request.dto.ItemRequestDto;
+import ru.practicum.shareit.common.request.dto.ItemRequestWithResponsesDto;
 
 import java.util.List;
 

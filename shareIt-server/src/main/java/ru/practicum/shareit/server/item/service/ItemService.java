@@ -1,8 +1,8 @@
 package ru.practicum.shareit.server.item.service;
 
-import ru.practicum.shareit.server.item.model.Comment;
-import ru.practicum.shareit.server.item.model.ExtendedItem;
-import ru.practicum.shareit.server.item.model.Item;
+import ru.practicum.shareit.common.item.model.Comment;
+import ru.practicum.shareit.common.item.model.ExtendedItem;
+import ru.practicum.shareit.common.item.model.Item;
 
 import java.util.Collection;
 

@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.server.request.dto.ItemRequestDto;
-import ru.practicum.shareit.server.request.dto.ItemRequestWithResponsesDto;
+import ru.practicum.shareit.common.request.dto.ItemRequestDto;
+import ru.practicum.shareit.common.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.shareit.server.request.service.ItemRequestService;
 
 import javax.validation.Valid;
