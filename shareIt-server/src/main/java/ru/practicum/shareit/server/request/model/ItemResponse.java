@@ -1,9 +1,8 @@
 package ru.practicum.shareit.server.request.model;
 
-import ru.practicum.shareit.server.item.model.Item;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import ru.practicum.shareit.server.item.model.Item;
 
 import javax.persistence.*;
 

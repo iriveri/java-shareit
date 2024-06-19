@@ -1,14 +1,14 @@
 package ru.practicum.shareit.server.item.mapper;
 
-import ru.practicum.shareit.server.booking.mapper.BookingMapper;
-import ru.practicum.shareit.common.item.dto.ExtendedItemDto;
-import ru.practicum.shareit.common.item.dto.ItemDto;
-import ru.practicum.shareit.server.item.model.ExtendedItem;
-import ru.practicum.shareit.server.item.model.Item;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
+import ru.practicum.shareit.common.item.dto.ExtendedItemDto;
+import ru.practicum.shareit.common.item.dto.ItemDto;
+import ru.practicum.shareit.server.booking.mapper.BookingMapper;
+import ru.practicum.shareit.server.item.model.ExtendedItem;
+import ru.practicum.shareit.server.item.model.Item;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE,

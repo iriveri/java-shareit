@@ -9,9 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.common.user.dto.UserDto;
 import ru.practicum.shareit.server.user.UserController;
-import ru.practicum.shareit.server.user.dto.UserDto;
-import ru.practicum.shareit.server.user.dto.UserMapper;
+import ru.practicum.shareit.server.user.mapper.UserMapper;
 import ru.practicum.shareit.server.user.model.User;
 import ru.practicum.shareit.server.user.service.UserService;
 

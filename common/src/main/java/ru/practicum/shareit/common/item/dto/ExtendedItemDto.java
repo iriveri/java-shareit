@@ -1,11 +1,10 @@
 package ru.practicum.shareit.common.item.dto;
 
-import ru.practicum.shareit.common.booking.dto.BookingShortDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
+import ru.practicum.shareit.common.booking.dto.BookingShortDto;
 
 import java.util.Collection;
 

@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import ru.practicum.shareit.common.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.common.booking.dto.BookingResponseDto;
 
-
 import java.util.List;
 
 @Service

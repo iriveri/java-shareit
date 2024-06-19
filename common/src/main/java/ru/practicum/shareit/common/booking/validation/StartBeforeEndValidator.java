@@ -1,4 +1,5 @@
 package ru.practicum.shareit.common.booking.validation;
+
 import ru.practicum.shareit.common.booking.dto.BookingRequestDto;
 
 import javax.validation.ConstraintValidator;

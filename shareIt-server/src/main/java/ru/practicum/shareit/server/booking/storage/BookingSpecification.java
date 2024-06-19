@@ -1,8 +1,8 @@
 package ru.practicum.shareit.server.booking.storage;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.practicum.shareit.server.booking.model.Booking;
 import ru.practicum.shareit.common.booking.model.BookingStatus;
+import ru.practicum.shareit.server.booking.model.Booking;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

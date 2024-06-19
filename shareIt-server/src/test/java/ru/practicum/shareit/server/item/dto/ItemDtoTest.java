@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import ru.practicum.shareit.common.item.dto.ItemDto;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;

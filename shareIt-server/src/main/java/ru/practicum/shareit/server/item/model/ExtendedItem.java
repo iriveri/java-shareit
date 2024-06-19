@@ -1,8 +1,8 @@
 package ru.practicum.shareit.server.item.model;
 
-import ru.practicum.shareit.server.booking.model.Booking;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.server.booking.model.Booking;
 
 import java.util.Collection;
 

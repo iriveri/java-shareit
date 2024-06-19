@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import ru.practicum.shareit.server.booking.model.Booking;
+import ru.practicum.shareit.common.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.common.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.common.booking.dto.BookingShortDto;
 import ru.practicum.shareit.common.booking.model.BookingStatus;
+import ru.practicum.shareit.server.booking.mapper.BookingMapper;
+import ru.practicum.shareit.server.booking.model.Booking;
 import ru.practicum.shareit.server.item.model.Item;
 import ru.practicum.shareit.server.user.model.User;
 

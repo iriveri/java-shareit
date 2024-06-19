@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import ru.practicum.shareit.common.user.dto.UserDto;
+import ru.practicum.shareit.server.user.mapper.UserMapper;
 import ru.practicum.shareit.server.user.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

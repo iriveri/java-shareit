@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import ru.practicum.shareit.server.booking.dto.BookingMapper;
-import ru.practicum.shareit.server.item.dto.CommentMapper;
-import ru.practicum.shareit.server.item.dto.ItemMapper;
+import ru.practicum.shareit.common.request.dto.ItemRequestDto;
+import ru.practicum.shareit.common.request.dto.ItemRequestWithResponsesDto;
+import ru.practicum.shareit.server.booking.mapper.BookingMapper;
+import ru.practicum.shareit.server.item.mapper.CommentMapper;
+import ru.practicum.shareit.server.item.mapper.ItemMapper;
+import ru.practicum.shareit.server.request.mapper.ItemRequestMapper;
+import ru.practicum.shareit.server.request.mapper.ItemResponseMapper;
 import ru.practicum.shareit.server.request.model.ExtendedItemRequest;
 import ru.practicum.shareit.server.request.model.ItemRequest;
 

@@ -1,6 +1,8 @@
 package ru.practicum.shareit.server.request.dto;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.common.request.dto.ItemRequestWithResponsesDto;
+import ru.practicum.shareit.common.request.dto.ItemResponseDto;
 
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +55,7 @@ class ItemRequestWithResponsesDtoTest {
         ItemRequestWithResponsesDto dto1 = new ItemRequestWithResponsesDto();
         ItemRequestWithResponsesDto dto2 = new ItemRequestWithResponsesDto();
 
-        assertTrue(dto1.canEqual(dto2));
+        assertTrue(dto1.equals(dto2));
     }
 
     @Test

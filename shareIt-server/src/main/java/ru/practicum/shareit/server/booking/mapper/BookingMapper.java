@@ -1,13 +1,13 @@
 package ru.practicum.shareit.server.booking.mapper;
 
-import ru.practicum.shareit.common.booking.dto.BookingRequestDto;
-import ru.practicum.shareit.common.booking.dto.BookingResponseDto;
-import ru.practicum.shareit.common.booking.dto.BookingShortDto;
-import ru.practicum.shareit.server.booking.model.Booking;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
+import ru.practicum.shareit.common.booking.dto.BookingRequestDto;
+import ru.practicum.shareit.common.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.common.booking.dto.BookingShortDto;
+import ru.practicum.shareit.server.booking.model.Booking;
 
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,

@@ -2,7 +2,9 @@ package ru.practicum.shareit.server.request.dto;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import ru.practicum.shareit.common.request.dto.ItemResponseDto;
 import ru.practicum.shareit.server.item.model.Item;
+import ru.practicum.shareit.server.request.mapper.ItemResponseMapper;
 import ru.practicum.shareit.server.request.model.ItemResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
