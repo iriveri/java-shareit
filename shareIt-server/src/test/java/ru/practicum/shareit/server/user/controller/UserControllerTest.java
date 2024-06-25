@@ -64,27 +64,7 @@ public class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
-    @Test
-    void createUser_InvalidEmail_ShouldReturnBadRequest() throws Exception {
-        userDto.setEmail("invalid-email");
 
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("Введён некоректный e-mail"));
-    }
-
-    @Test
-    void createUser_EmptyName_ShouldReturnBadRequest() throws Exception {
-        userDto.setName("");
-
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("must not be blank"));
-    }
 
     @Test
     void editUser_ShouldReturnOk() throws Exception {

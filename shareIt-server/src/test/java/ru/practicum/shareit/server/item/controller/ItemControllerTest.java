@@ -83,18 +83,6 @@ public class ItemControllerTest {
     }
 
     @Test
-    void addItem_EmptyName_ShouldReturnBadRequest() throws Exception {
-        itemDto.setName("");
-
-        mockMvc.perform(post("/items")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
-                        .content(objectMapper.writeValueAsString(itemDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.name").value("must not be empty"));
-    }
-
-    @Test
     void editItem_ShouldReturnOk() throws Exception {
         itemDto.setName("Updated name");
         itemDto.setDescription("Updated description");
@@ -178,16 +166,5 @@ public class ItemControllerTest {
                 .andExpect(jsonPath("$.text").value(commentDto.getText()));
     }
 
-    @Test
-    void addComment_EmptyText_ShouldReturnBadRequest() throws Exception {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setText("");
 
-        mockMvc.perform(post("/items/{itemId}/comment", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
-                        .content(objectMapper.writeValueAsString(commentDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.text").value("must not be blank"));
-    }
 }

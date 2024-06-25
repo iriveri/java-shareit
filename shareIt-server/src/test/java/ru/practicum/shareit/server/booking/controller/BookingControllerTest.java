@@ -106,57 +106,7 @@ public class BookingControllerTest {
         verify(bookingService, times(1)).create(anyLong(), any(Booking.class));
     }
 
-    @Test
-    void createBooking_InvalidDates_ShouldReturnBadRequest() throws Exception {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(1));
 
-        mockMvc.perform(post("/bookings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
-                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
-    }
-
-    @Test
-    void createBooking_NoId_ShouldReturnBadRequest() throws Exception {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(null, LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(2));
-
-        mockMvc.perform(post("/bookings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
-                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
-    }
-
-    @Test
-    void createBooking_NoStart_ShouldReturnBadRequest() throws Exception {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, null, LocalDateTime.now().plusDays(1));
-
-        mockMvc.perform(post("/bookings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
-                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
-    }
-
-    @Test
-    void createBooking_NoEnd_ShouldReturnBadRequest() throws Exception {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), null);
-
-        mockMvc.perform(post("/bookings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-Sharer-User-Id", 1L)
-                        .content(objectMapper.writeValueAsString(bookingRequestDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, times(0)).create(anyLong(), any(Booking.class));
-    }
 
     @Test
     void updateBookingStatus_ShouldReturnOk() throws Exception {
@@ -205,33 +155,6 @@ public class BookingControllerTest {
                 .andExpect(jsonPath("$[0].item.id").value(1L));
 
         verify(bookingService, times(1)).getUserBookings(anyLong(), anyString(), anyInt(), anyInt());
-    }
-
-    @Test
-    void getUserBookings_fromNegative_ShouldReturnBadRequest() throws Exception {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), null);
-
-        mockMvc.perform(get("/bookings")
-
-                        .header("X-Sharer-User-Id", 1L)
-                        .param("from", "-1")
-                        .param("size", "10"))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, times(0)).getUserBookings(anyLong(), anyString(), anyInt(), anyInt());
-    }
-
-    @Test
-    void getUserBookings_sizeOver100_ShouldReturnBadRequest() throws Exception {
-        BookingRequestDto bookingRequestDto = new BookingRequestDto(1L, LocalDateTime.now().plusDays(2), null);
-
-        mockMvc.perform(get("/bookings")
-                        .header("X-Sharer-User-Id", 1L)
-                        .param("from", "0")
-                        .param("size", "101"))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, times(0)).getUserBookings(anyLong(), anyString(), anyInt(), anyInt());
     }
 
     @Test
