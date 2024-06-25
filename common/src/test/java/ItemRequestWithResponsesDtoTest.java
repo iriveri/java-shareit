@@ -1,5 +1,3 @@
-package ru.practicum.shareit.server.request.dto;
-
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.common.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.shareit.common.request.dto.ItemResponseDto;

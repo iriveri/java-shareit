@@ -1,4 +1,4 @@
-package ru.practicum.shareit.server.booking.dto;
+package ru.practicum.shareit.common.booking.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-
 public class BookingRequestDtoTest {
 
     @Autowired
