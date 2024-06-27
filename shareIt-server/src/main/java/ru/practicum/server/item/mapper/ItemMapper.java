@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import ru.practicum.server.item.model.ExtendedItem;
 import ru.practicum.common.item.dto.ExtendedItemDto;
 import ru.practicum.common.item.dto.ItemDto;
 import ru.practicum.server.booking.mapper.BookingMapper;
+import ru.practicum.server.item.model.ExtendedItem;
 import ru.practicum.server.item.model.Item;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,

@@ -5,13 +5,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.server.request.storage.ItemRequestJpaRepository;
-import ru.practicum.server.request.storage.ItemResponseJpaRepository;
 import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.request.model.ExtendedItemRequest;
 import ru.practicum.server.request.model.ItemRequest;
 import ru.practicum.server.request.model.ItemResponse;
+import ru.practicum.server.request.storage.ItemRequestJpaRepository;
+import ru.practicum.server.request.storage.ItemResponseJpaRepository;
 import ru.practicum.server.user.service.UserServiceImpl;
 
 import java.time.LocalDateTime;

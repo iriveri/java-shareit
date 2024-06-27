@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.gateway.item.service.ItemService;
 import ru.practicum.common.item.dto.CommentDto;
 import ru.practicum.common.item.dto.ItemDto;
+import ru.practicum.gateway.item.service.ItemService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;

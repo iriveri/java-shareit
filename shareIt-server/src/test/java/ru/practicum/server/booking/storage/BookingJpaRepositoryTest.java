@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
+import ru.practicum.common.booking.model.BookingStatus;
 import ru.practicum.server.booking.model.Booking;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.user.model.User;
-import ru.practicum.common.booking.model.BookingStatus;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;

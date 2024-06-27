@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.storage.UserJpaRepository;
-import ru.practicum.server.exception.NotFoundException;
 
 import java.util.Optional;
 

@@ -26,6 +26,7 @@ public class ItemRequestDtoTest {
 
     @Autowired
     private Validator validator;
+
     @TestConfiguration
     static class Config {
         @Bean

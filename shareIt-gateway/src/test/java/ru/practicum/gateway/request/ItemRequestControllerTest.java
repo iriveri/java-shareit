@@ -10,11 +10,7 @@ import ru.practicum.common.request.dto.ItemRequestDto;
 import ru.practicum.common.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.gateway.request.service.ItemRequestService;
 
-
 import java.time.LocalDateTime;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @WebMvcTest(ItemRequestController.class)
 public class ItemRequestControllerTest {
@@ -39,7 +35,6 @@ public class ItemRequestControllerTest {
         requestDto = new ItemRequestDto(null, "Request description", LocalDateTime.now());
         responseDto = new ItemRequestDto(1L, "Request description", LocalDateTime.now());
         withResponsesDto = new ItemRequestWithResponsesDto();
-
 
 
     }

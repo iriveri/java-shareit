@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.server.booking.service.BookingService;
+import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.item.model.Comment;
 import ru.practicum.server.item.model.ExtendedItem;
+import ru.practicum.server.item.model.Item;
 import ru.practicum.server.item.storage.CommentJpaRepository;
 import ru.practicum.server.item.storage.ItemJpaRepository;
 import ru.practicum.server.request.service.ItemRequestService;
 import ru.practicum.server.user.service.UserService;
-import ru.practicum.server.exception.NotFoundException;
-import ru.practicum.server.item.model.Item;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;

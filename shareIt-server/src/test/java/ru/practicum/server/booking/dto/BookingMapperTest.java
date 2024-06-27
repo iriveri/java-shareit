@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import ru.practicum.server.booking.model.Booking;
-import ru.practicum.server.item.model.Item;
-import ru.practicum.server.user.model.User;
 import ru.practicum.common.booking.dto.BookingRequestDto;
 import ru.practicum.common.booking.dto.BookingResponseDto;
 import ru.practicum.common.booking.dto.BookingShortDto;
 import ru.practicum.common.booking.model.BookingStatus;
 import ru.practicum.server.booking.mapper.BookingMapper;
+import ru.practicum.server.booking.model.Booking;
+import ru.practicum.server.item.model.Item;
+import ru.practicum.server.user.model.User;
 
 import java.time.LocalDateTime;
 

@@ -9,6 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.common.item.dto.CommentDto;
+import ru.practicum.common.item.dto.ExtendedItemDto;
+import ru.practicum.common.item.dto.ItemDto;
 import ru.practicum.server.item.ItemController;
 import ru.practicum.server.item.mapper.CommentMapper;
 import ru.practicum.server.item.mapper.ItemMapper;
@@ -16,9 +19,6 @@ import ru.practicum.server.item.model.Comment;
 import ru.practicum.server.item.model.ExtendedItem;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.item.service.ItemService;
-import ru.practicum.common.item.dto.CommentDto;
-import ru.practicum.common.item.dto.ExtendedItemDto;
-import ru.practicum.common.item.dto.ItemDto;
 
 import java.util.Collections;
 

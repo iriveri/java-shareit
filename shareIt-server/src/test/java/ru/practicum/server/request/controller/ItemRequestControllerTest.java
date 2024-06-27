@@ -9,14 +9,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.common.request.dto.ItemRequestDto;
+import ru.practicum.common.request.dto.ItemRequestWithResponsesDto;
 import ru.practicum.server.request.ItemRequestController;
 import ru.practicum.server.request.mapper.ItemRequestMapper;
 import ru.practicum.server.request.model.ExtendedItemRequest;
+import ru.practicum.server.request.model.ItemRequest;
 import ru.practicum.server.request.service.ItemRequestService;
 import ru.practicum.server.user.model.User;
-import ru.practicum.common.request.dto.ItemRequestDto;
-import ru.practicum.common.request.dto.ItemRequestWithResponsesDto;
-import ru.practicum.server.request.model.ItemRequest;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

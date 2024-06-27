@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.common.user.dto.UserDto;
 import ru.practicum.server.user.mapper.UserMapper;
 import ru.practicum.server.user.service.UserService;
-import ru.practicum.common.user.dto.UserDto;
 
 import java.util.stream.Collectors;
 

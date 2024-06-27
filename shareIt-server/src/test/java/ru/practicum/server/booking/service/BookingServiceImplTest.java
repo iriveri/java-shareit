@@ -9,14 +9,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import ru.practicum.common.booking.model.BookingStatus;
 import ru.practicum.server.booking.model.Booking;
 import ru.practicum.server.booking.storage.BookingJpaRepository;
+import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.item.service.ItemServiceImpl;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserServiceImpl;
-import ru.practicum.common.booking.model.BookingStatus;
-import ru.practicum.server.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

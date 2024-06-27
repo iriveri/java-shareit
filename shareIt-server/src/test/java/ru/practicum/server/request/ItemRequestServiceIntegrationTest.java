@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.item.service.ItemService;
 import ru.practicum.server.request.model.ExtendedItemRequest;
+import ru.practicum.server.request.model.ItemRequest;
 import ru.practicum.server.request.service.ItemRequestService;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
-import ru.practicum.server.request.model.ItemRequest;
 
 import java.util.List;
 

@@ -7,15 +7,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.request.model.ExtendedItemRequest;
+import ru.practicum.server.request.model.ItemRequest;
+import ru.practicum.server.request.model.ItemResponse;
 import ru.practicum.server.request.storage.ItemRequestJpaRepository;
 import ru.practicum.server.request.storage.ItemResponseJpaRepository;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserServiceImpl;
-import ru.practicum.server.exception.NotFoundException;
-import ru.practicum.server.request.model.ItemRequest;
-import ru.practicum.server.request.model.ItemResponse;
 
 import java.util.Collections;
 import java.util.List;

@@ -8,19 +8,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.gateway.booking.service.BookingService;
 import ru.practicum.common.booking.dto.BookingRequestDto;
 import ru.practicum.common.booking.dto.BookingResponseDto;
 import ru.practicum.common.booking.model.BookingStatus;
 import ru.practicum.common.item.dto.ItemDto;
 import ru.practicum.common.user.dto.UserDto;
+import ru.practicum.gateway.booking.service.BookingService;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookingController.class)
 public class BookingControllerTest {

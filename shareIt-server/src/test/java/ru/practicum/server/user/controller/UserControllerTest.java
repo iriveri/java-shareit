@@ -9,11 +9,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.common.user.dto.UserDto;
 import ru.practicum.server.user.UserController;
 import ru.practicum.server.user.mapper.UserMapper;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
-import ru.practicum.common.user.dto.UserDto;
 
 import java.util.Collections;
 
@@ -63,7 +63,6 @@ public class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
-
 
 
     @Test

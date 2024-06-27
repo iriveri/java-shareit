@@ -8,10 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.server.booking.model.Booking;
-import ru.practicum.server.booking.service.BookingService;
-import ru.practicum.server.item.model.Item;
-import ru.practicum.server.user.model.User;
 import ru.practicum.common.booking.dto.BookingRequestDto;
 import ru.practicum.common.booking.dto.BookingResponseDto;
 import ru.practicum.common.booking.model.BookingStatus;
@@ -19,6 +15,10 @@ import ru.practicum.common.item.dto.ItemDto;
 import ru.practicum.common.user.dto.UserDto;
 import ru.practicum.server.booking.BookingController;
 import ru.practicum.server.booking.mapper.BookingMapper;
+import ru.practicum.server.booking.model.Booking;
+import ru.practicum.server.booking.service.BookingService;
+import ru.practicum.server.item.model.Item;
+import ru.practicum.server.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -105,7 +105,6 @@ public class BookingControllerTest {
 
         verify(bookingService, times(1)).create(anyLong(), any(Booking.class));
     }
-
 
 
     @Test

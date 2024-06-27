@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import ru.practicum.common.request.dto.ItemRequestDto;
+import ru.practicum.common.request.dto.ItemRequestWithResponsesDto;
+import ru.practicum.server.booking.mapper.BookingMapper;
 import ru.practicum.server.item.mapper.CommentMapper;
 import ru.practicum.server.item.mapper.ItemMapper;
 import ru.practicum.server.request.mapper.ItemRequestMapper;
 import ru.practicum.server.request.mapper.ItemResponseMapper;
 import ru.practicum.server.request.model.ExtendedItemRequest;
-import ru.practicum.common.request.dto.ItemRequestDto;
-import ru.practicum.common.request.dto.ItemRequestWithResponsesDto;
-import ru.practicum.server.booking.mapper.BookingMapper;
 import ru.practicum.server.request.model.ItemRequest;
 
 import java.time.LocalDateTime;

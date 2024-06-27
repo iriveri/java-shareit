@@ -25,6 +25,7 @@ public class UserDtoTest {
 
     @Autowired
     private Validator validator;
+
     @TestConfiguration
     static class Config {
         @Bean

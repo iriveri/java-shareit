@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.gateway.booking.service.BookingService;
 import ru.practicum.common.booking.dto.BookingRequestDto;
 import ru.practicum.common.booking.dto.BookingResponseDto;
+import ru.practicum.gateway.booking.service.BookingService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;

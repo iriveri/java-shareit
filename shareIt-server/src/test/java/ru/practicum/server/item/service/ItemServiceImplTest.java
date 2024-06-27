@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.practicum.server.booking.service.BookingService;
+import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.item.model.Comment;
 import ru.practicum.server.item.model.ExtendedItem;
 import ru.practicum.server.item.model.Item;
@@ -13,7 +14,6 @@ import ru.practicum.server.item.storage.CommentJpaRepository;
 import ru.practicum.server.item.storage.ItemJpaRepository;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
-import ru.practicum.server.exception.NotFoundException;
 
 import java.util.Collections;
 import java.util.List;
