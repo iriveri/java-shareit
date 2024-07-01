@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class shareIt {
+public class ShareIt {
 
     public static void main(String[] args) {
 
