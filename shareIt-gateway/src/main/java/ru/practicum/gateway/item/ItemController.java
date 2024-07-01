@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.item.dto.CommentDto;
+import ru.practicum.common.item.dto.ExtendedItemDto;
 import ru.practicum.common.item.dto.ItemDto;
 import ru.practicum.gateway.item.service.ItemService;
 
@@ -50,22 +51,22 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItem(
+    public ResponseEntity<ExtendedItemDto> getItem(
             @PathVariable Long itemId,
             @RequestHeader("X-Sharer-User-Id") Long userId
     ) {
-        ItemDto item = service.getById(itemId);
+        ExtendedItemDto item = service.getById(itemId, userId);
         log.info("Item data for ID {} has been successfully extracted", item.getId());
         return ResponseEntity.status(HttpStatus.OK).body(item);
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemDto>> getAllItems(
+    public ResponseEntity<List<ExtendedItemDto>> getAllItems(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(value = "from", defaultValue = "0") @Min(0) int offset,
             @RequestParam(value = "size", defaultValue = "10") @Min(1) @Max(100) int limit
     ) {
-        List<ItemDto> items = service.getItemsByOwner(userId, offset, limit);
+        List<ExtendedItemDto> items = service.getItemsByOwner(userId, offset, limit);
         log.info("List consisting of {} items has been successfully fetched", items.size());
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }

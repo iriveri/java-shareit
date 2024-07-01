@@ -32,12 +32,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.class)
     public ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException ex, WebRequest request) {
-        return handleExceptionInternal(ex, Map.of("error", ex.getStatusText()), new HttpHeaders(), ex.getStatusCode(), request);
+        return handleExceptionInternal(ex, ex.getResponseBodyAsString(), new HttpHeaders(), ex.getStatusCode(), request);
     }
 
     @ExceptionHandler(HttpServerErrorException.class)
     public ResponseEntity<Object> handleHttpServerErrorException(HttpServerErrorException ex, WebRequest request) {
-        return handleExceptionInternal(ex, Map.of("error", ex.getStatusText()), new HttpHeaders(), ex.getStatusCode(), request);
+        return handleExceptionInternal(ex, ex.getResponseBodyAsString(), new HttpHeaders(), ex.getStatusCode(), request);
     }
 
 }
