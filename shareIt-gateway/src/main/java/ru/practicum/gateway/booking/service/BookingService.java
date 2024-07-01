@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.common.booking.dto.BookingRequestDto;
@@ -68,7 +71,8 @@ public class BookingService {
         headers.add("X-Sharer-User-Id", userId.toString());
         HttpEntity<BookingRequestDto> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List<BookingResponseDto>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<BookingResponseDto>>() {});
+        ResponseEntity<List<BookingResponseDto>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<BookingResponseDto>>() {
+        });
         return response.getBody();
     }
 
@@ -80,7 +84,8 @@ public class BookingService {
         headers.add("X-Sharer-User-Id", ownerId.toString());
         HttpEntity<BookingRequestDto> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List<BookingResponseDto>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<BookingResponseDto>>() {});
+        ResponseEntity<List<BookingResponseDto>> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<BookingResponseDto>>() {
+        });
         return response.getBody();
     }
 }

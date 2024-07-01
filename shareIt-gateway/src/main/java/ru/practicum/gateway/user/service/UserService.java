@@ -23,18 +23,21 @@ public class UserService {
         this.restTemplate = restTemplate;
         this.serverUrl = serverUrl;
     }
+
     @CacheEvict(value = {"users", "allUsers"}, allEntries = true)
     public UserDto create(UserDto user) {
         String url = serverUrl + "/users";
         return restTemplate.postForObject(url, user, UserDto.class);
     }
+
     @CacheEvict(value = {"users", "allUsers"}, allEntries = true)
     public UserDto edit(Long userId, UserDto user) {
         String url = String.format(serverUrl + "/users/%d", userId);
         HttpEntity<UserDto> requestEntity = new HttpEntity<>(user);
         return restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, UserDto.class).getBody();
     }
-    @Cacheable(value = "users", key= "#userId")
+
+    @Cacheable(value = "users", key = "#userId")
     public UserDto getById(Long userId) {
         String url = String.format(serverUrl + "/users/%d", userId);
         return restTemplate.getForObject(url, UserDto.class);
@@ -45,6 +48,7 @@ public class UserService {
         String url = String.format(serverUrl + "/users/%d", userId);
         restTemplate.delete(url);
     }
+
     @Cacheable(value = "allUsers")
     public List<UserDto> getAllUsers() {
         String url = serverUrl + "/users";

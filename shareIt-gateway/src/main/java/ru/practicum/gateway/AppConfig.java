@@ -3,7 +3,6 @@ package ru.practicum.gateway;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

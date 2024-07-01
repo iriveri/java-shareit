@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.common.item.dto.CommentDto;
@@ -25,7 +28,7 @@ public class ItemService {
         this.serverUrl = serverUrl;
     }
 
-   @CacheEvict(value = {"items", "itemsByOwner", "itemsSearch","userRequests", "allRequests", "requestsById"}, allEntries = true)
+    @CacheEvict(value = {"items", "itemsByOwner", "itemsSearch", "userRequests", "allRequests", "requestsById"}, allEntries = true)
     public ItemDto create(ItemDto itemDto, Long userId) {
         String url = serverUrl + "/items";
 
@@ -37,7 +40,7 @@ public class ItemService {
         return responseEntity.getBody();
     }
 
-    @CacheEvict(value = {"items", "itemsByOwner", "itemsSearch","userRequests", "allRequests", "requestsById"}, allEntries = true)
+    @CacheEvict(value = {"items", "itemsByOwner", "itemsSearch", "userRequests", "allRequests", "requestsById"}, allEntries = true)
     public ItemDto edit(Long itemId, ItemDto itemDto, Long userId) {
         String url = String.format(serverUrl + "/items/%d", itemId);
 
@@ -68,7 +71,8 @@ public class ItemService {
         headers.add("X-Sharer-User-Id", userId.toString());
         HttpEntity<ItemDto> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List<ExtendedItemDto>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<ExtendedItemDto>>() {});
+        ResponseEntity<List<ExtendedItemDto>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<ExtendedItemDto>>() {
+        });
         return responseEntity.getBody();
     }
 
@@ -79,9 +83,11 @@ public class ItemService {
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<ItemDto> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List<ItemDto>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<ItemDto>>() {});
+        ResponseEntity<List<ItemDto>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<ItemDto>>() {
+        });
         return responseEntity.getBody();
     }
+
     @CacheEvict(value = {"items", "itemsByOwner", "itemsSearch"}, allEntries = true)
     public CommentDto addComment(Long itemId, Long userId, CommentDto commentDto) {
         String url = String.format(serverUrl + "/items/%d/comment", itemId);
