@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.common.booking.model.BookingStatus;
+import ru.practicum.server.booking.model.BookingStatus;
 import ru.practicum.server.booking.model.Booking;
 import ru.practicum.server.booking.service.BookingService;
 import ru.practicum.server.item.model.Item;

@@ -2,7 +2,6 @@ package ru.practicum.server.request.dto;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.common.request.dto.ItemResponseDto;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.request.mapper.ItemResponseMapper;
 import ru.practicum.server.request.model.ItemResponse;

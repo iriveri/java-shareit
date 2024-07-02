@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.common.booking.model.BookingStatus;
+import ru.practicum.server.booking.model.BookingStatus;
 import ru.practicum.server.booking.model.Booking;
 import ru.practicum.server.booking.storage.BookingJpaRepository;
 import ru.practicum.server.booking.storage.BookingSpecification;

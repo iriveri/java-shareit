@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.common.user.dto.UserDto;
+import ru.practicum.server.user.dto.UserDto;
 import ru.practicum.gateway.user.service.UserService;
 
 import javax.validation.Valid;

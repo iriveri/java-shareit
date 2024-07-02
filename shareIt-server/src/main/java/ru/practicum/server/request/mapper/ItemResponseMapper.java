@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import ru.practicum.common.request.dto.ItemResponseDto;
+import ru.practicum.server.request.dto.ItemResponseDto;
 import ru.practicum.server.request.model.ItemResponse;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING,

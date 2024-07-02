@@ -10,8 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.common.request.dto.ItemRequestDto;
-import ru.practicum.common.request.dto.ItemRequestWithResponsesDto;
+import ru.practicum.server.request.dto.ItemRequestDto;
+import ru.practicum.server.request.dto.ItemRequestWithResponsesDto;
 
 import java.util.List;
 

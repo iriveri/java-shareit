@@ -4,9 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-import ru.practicum.common.booking.dto.BookingRequestDto;
-import ru.practicum.common.booking.dto.BookingResponseDto;
-import ru.practicum.common.booking.dto.BookingShortDto;
+import ru.practicum.server.booking.dto.BookingRequestDto;
+import ru.practicum.server.booking.dto.BookingResponseDto;
+import ru.practicum.server.booking.dto.BookingShortDto;
 import ru.practicum.server.booking.model.Booking;
 
 

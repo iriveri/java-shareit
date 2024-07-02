@@ -10,8 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.common.booking.dto.BookingRequestDto;
-import ru.practicum.common.booking.dto.BookingResponseDto;
+import ru.practicum.server.booking.dto.BookingRequestDto;
+import ru.practicum.server.booking.dto.BookingResponseDto;
 
 import java.util.List;
 

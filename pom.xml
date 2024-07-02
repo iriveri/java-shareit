@@ -6,7 +6,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>common</module>
         <module>shareIt-server</module>
         <module>shareIt-gateway</module>
 

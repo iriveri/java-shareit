@@ -1,7 +1,7 @@
 package ru.practicum.server.booking.storage;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.practicum.common.booking.model.BookingStatus;
+import ru.practicum.server.booking.model.BookingStatus;
 import ru.practicum.server.booking.model.Booking;
 
 import javax.persistence.criteria.CriteriaBuilder;

@@ -1,6 +1,6 @@
 package ru.practicum.server.booking.validation;
 
-import ru.practicum.common.booking.dto.BookingRequestDto;
+import ru.practicum.server.booking.dto.BookingRequestDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
