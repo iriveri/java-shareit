@@ -1,10 +1,9 @@
 package ru.practicum.server.request.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.server.item.model.Item;
-
-import javax.persistence.*;
 
 @Entity
 @Data

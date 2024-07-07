@@ -1,5 +1,6 @@
 package ru.practicum.server.item.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
@@ -15,7 +16,6 @@ import ru.practicum.server.item.storage.ItemJpaRepository;
 import ru.practicum.server.request.service.ItemRequestService;
 import ru.practicum.server.user.service.UserService;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
 

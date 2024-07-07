@@ -1,5 +1,6 @@
 package ru.practicum.server.item;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
 import ru.practicum.server.user.storage.UserJpaRepository;
 
-import javax.persistence.EntityManager;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;

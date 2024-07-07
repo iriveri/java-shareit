@@ -1,5 +1,6 @@
 package ru.practicum.server.user.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,6 @@ import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.storage.UserJpaRepository;
 
-import javax.transaction.Transactional;
 import java.util.Collection;
 
 @Service

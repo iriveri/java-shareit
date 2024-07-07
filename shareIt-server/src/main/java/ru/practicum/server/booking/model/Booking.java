@@ -1,12 +1,12 @@
 package ru.practicum.server.booking.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.common.booking.model.BookingStatus;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.user.model.User;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

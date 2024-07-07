@@ -1,8 +1,8 @@
 package ru.practicum.gateway;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -35,7 +35,6 @@ public class AppConfig {
         return cacheManager;
     }
 
-
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -48,10 +47,3 @@ public class AppConfig {
         return "http://127.0.0.1:8081";
     }
 }
-
-
-
-
-
-
-

@@ -1,5 +1,6 @@
 package ru.practicum.server.booking;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import ru.practicum.server.item.service.ItemService;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 

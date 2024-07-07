@@ -1,9 +1,8 @@
 package ru.practicum.server.user.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @Data

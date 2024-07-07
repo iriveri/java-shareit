@@ -1,5 +1,8 @@
 package ru.practicum.gateway.booking;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,9 +13,6 @@ import ru.practicum.common.booking.dto.BookingRequestDto;
 import ru.practicum.common.booking.dto.BookingResponseDto;
 import ru.practicum.gateway.booking.service.BookingService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController

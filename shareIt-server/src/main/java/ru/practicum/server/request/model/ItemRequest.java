@@ -1,10 +1,10 @@
 package ru.practicum.server.request.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.server.user.model.User;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

@@ -1,5 +1,6 @@
 package ru.practicum.server.user;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
 import ru.practicum.server.user.storage.UserJpaRepository;
-
-import javax.persistence.EntityManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
