@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.server.booking.service.BookingService;
 import ru.practicum.server.exception.NotFoundException;
@@ -106,7 +107,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<Item> getItemsByOwner(Long ownerId, int offset, int limit) {
         userService.validate(ownerId);
-        PageRequest pageRequest = PageRequest.of(offset / limit, limit);
+        PageRequest pageRequest = PageRequest.of(offset / limit, limit, Sort.by("id").ascending());
         return itemRepository.findByOwnerId(ownerId, pageRequest).getContent();
     }
 
