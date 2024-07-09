@@ -44,7 +44,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.email").value("Введён некоректный e-mail"));
+                .andExpect(jsonPath("$.email").value("Email should be valid"));
     }
 
     @Test
