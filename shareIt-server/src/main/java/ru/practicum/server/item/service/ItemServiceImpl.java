@@ -15,7 +15,7 @@ import ru.practicum.server.item.storage.ItemJpaRepository;
 import ru.practicum.server.request.service.ItemRequestService;
 import ru.practicum.server.user.service.UserService;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collection;
 

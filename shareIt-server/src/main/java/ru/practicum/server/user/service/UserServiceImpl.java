@@ -7,7 +7,7 @@ import ru.practicum.server.exception.NotFoundException;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.storage.UserJpaRepository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.Collection;
 
 @Service

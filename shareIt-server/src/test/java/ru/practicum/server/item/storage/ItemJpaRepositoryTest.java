@@ -11,7 +11,7 @@ import org.springframework.data.domain.Slice;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.user.model.User;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

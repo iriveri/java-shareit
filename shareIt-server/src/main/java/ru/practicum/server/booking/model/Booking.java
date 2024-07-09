@@ -6,7 +6,7 @@ import ru.practicum.common.booking.model.BookingStatus;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.user.model.User;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

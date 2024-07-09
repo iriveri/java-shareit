@@ -15,7 +15,7 @@ import ru.practicum.server.item.service.ItemService;
 import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 

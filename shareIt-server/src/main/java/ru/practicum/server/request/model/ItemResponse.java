@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.server.item.model.Item;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Data

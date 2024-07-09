@@ -11,7 +11,7 @@ import ru.practicum.server.booking.model.Booking;
 import ru.practicum.server.item.model.Item;
 import ru.practicum.server.user.model.User;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

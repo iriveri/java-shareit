@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.common.item.dto.CommentDto;
+import ru.practicum.common.item.dto.ExtendedItemDto;
 import ru.practicum.common.item.dto.ItemDto;
 import ru.practicum.server.item.mapper.CommentMapper;
 import ru.practicum.server.item.mapper.ItemMapper;
@@ -84,7 +85,7 @@ public class ItemController {
      * @return {@link ResponseEntity} содержащий объект {@link ItemDto} с информацией о вещи и статус ответа {@link HttpStatus#OK}
      */
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItem(
+    public ResponseEntity<ExtendedItemDto> getItem(
             @PathVariable Long itemId,
             @RequestHeader("X-Sharer-User-Id") Long userId
     ) {

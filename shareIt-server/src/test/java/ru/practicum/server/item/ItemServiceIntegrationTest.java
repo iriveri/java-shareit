@@ -13,7 +13,7 @@ import ru.practicum.server.user.model.User;
 import ru.practicum.server.user.service.UserService;
 import ru.practicum.server.user.storage.UserJpaRepository;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;

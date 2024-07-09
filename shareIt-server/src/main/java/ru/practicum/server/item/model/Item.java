@@ -3,11 +3,7 @@ package ru.practicum.server.item.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
-/**
- * TODO Sprint add-controllers.
- */
+import jakarta.persistence.*;
 
 @Entity
 @Data
