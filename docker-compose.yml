@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: ./shareIt-server
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/shareit
+      SPRING_DATASOURCE_USERNAME: shareit
+      SPRING_DATASOURCE_PASSWORD: shareit
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQL10Dialect
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      - db
+
+  gateway:
+    build:
+      context: ./shareIt-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_URL: http://server:8081
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: shareit
+      POSTGRES_USER: shareit
+      POSTGRES_PASSWORD: shareit
+
+volumes:
+  postgres-data:
